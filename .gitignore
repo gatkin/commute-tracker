@@ -1,5 +1,5 @@
 # Monkey C bin files
-*.prg.*
+*.prg*
 bin/*
 
 # Object files
