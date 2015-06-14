@@ -1,5 +1,6 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
+using Toybox.System as Sys;
 
 class CommuteTrackerApp extends App.AppBase {
 
@@ -13,7 +14,7 @@ class CommuteTrackerApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        return [ new CommuteTrackerView(), new CommuteTrackerDelegate() ];
+        return [ new MainView(), new CommuteTrackerDelegate() ];
     }
 
 }
@@ -21,7 +22,8 @@ class CommuteTrackerApp extends App.AppBase {
 class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 
     function onMenu() {
-        Ui.pushView(new Rez.Menus.MainMenu(), new CommuteTrackerMenuDelegate(), Ui.SLIDE_UP);
+    	Sys.println("Opening Menu");
+        Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
         return true;
     }
 

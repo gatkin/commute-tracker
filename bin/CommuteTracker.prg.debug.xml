@@ -1,28 +1,103 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <debugInfo>
 <pcToLineNum>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerView.mc" lineNum="8" pc="268435458" symbol="onLayout"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerView.mc" lineNum="18" pc="268435501" symbol="onUpdate"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerMenuDelegate.mc" lineNum="7" pc="268435528" symbol="onMenuItem"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerMenuDelegate.mc" lineNum="8" pc="268435539" symbol="onMenuItem"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerMenuDelegate.mc" lineNum="10" pc="268435574" symbol="onMenuItem"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="16" pc="268435608" symbol="getInitialView"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="24" pc="268435679" symbol="onMenu"/>
-<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="25" pc="268435763" symbol="onMenu"/>
-<entry filename="Rez" lineNum="5" pc="268436256" symbol="&lt;init&gt;"/>
-<entry filename="Rez" lineNum="13" pc="268435770" symbol="initialize"/>
-<entry filename="Rez" lineNum="14" pc="268435792" symbol="initialize"/>
-<entry filename="Rez" lineNum="21" pc="268436215" symbol="&lt;init&gt;"/>
-<entry filename="Rez" lineNum="22" pc="268436224" symbol="&lt;init&gt;"/>
-<entry filename="Rez" lineNum="31" pc="268435817" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="32" pc="268435831" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="33" pc="268435941" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="34" pc="268435956" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="35" pc="268436008" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="36" pc="268436096" symbol="MainLayout"/>
-<entry filename="Rez" lineNum="37" pc="268436148" symbol="MainLayout"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="13" pc="268435458" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="14" pc="268435469" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="15" pc="268435490" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="16" pc="268435507" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="17" pc="268435544" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="18" pc="268435586" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="19" pc="268435604" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="20" pc="268435625" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="21" pc="268435655" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="22" pc="268435685" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="27" pc="268435749" symbol="onMenuItem"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="36" pc="268435777" symbol="onLayout"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="46" pc="268435820" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="5" pc="268437967" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="6" pc="268437976" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\MainMenu.mc" lineNum="7" pc="268437985" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="17" pc="268435853" symbol="getInitialView"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="25" pc="268435924" symbol="onMenu"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="26" pc="268435945" symbol="onMenu"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteTrackerApp.mc" lineNum="27" pc="268436029" symbol="onMenu"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="22" pc="268436036" symbol="onLayout"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="27" pc="268436076" symbol="onShow"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="28" pc="268436110" symbol="onShow"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="34" pc="268436154" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="35" pc="268436161" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="36" pc="268436168" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="37" pc="268436175" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="39" pc="268436182" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="40" pc="268436199" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="41" pc="268436202" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="43" pc="268436205" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="44" pc="268436212" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="47" pc="268436225" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="48" pc="268436232" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="49" pc="268436257" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="51" pc="268436268" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="52" pc="268436296" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="53" pc="268436306" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="56" pc="268436353" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="57" pc="268436397" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="58" pc="268436422" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="64" pc="268436469" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="65" pc="268436496" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="66" pc="268436532" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="69" pc="268436544" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="70" pc="268436580" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="71" pc="268436646" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="72" pc="268436709" symbol="onUpdate"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="78" pc="268436778" symbol="onHide"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="82" pc="268436799" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="85" pc="268436815" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="86" pc="268436832" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="87" pc="268436855" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="89" pc="268436886" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="90" pc="268436896" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="92" pc="268436919" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="93" pc="268436932" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="94" pc="268436966" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="96" pc="268436979" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="98" pc="268436992" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="103" pc="268437050" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="104" pc="268437060" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="106" pc="268437083" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="107" pc="268437096" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="108" pc="268437130" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="110" pc="268437143" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="112" pc="268437156" symbol="updateActivityStats"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="13" pc="268438121" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="14" pc="268438130" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="15" pc="268438140" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="16" pc="268438149" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="17" pc="268438158" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="18" pc="268438167" symbol="&lt;init&gt;"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="123" pc="268437189" symbol="onKey"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="124" pc="268437202" symbol="onKey"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="126" pc="268437241" symbol="onKey"/>
+<entry filename="C:\\Users\\Greg\\Documents\\GitHub\\commute-tracker\\source\\CommuteActivity.mc" lineNum="136" pc="268437329" symbol="onResponse"/>
+<entry filename="Rez" lineNum="5" pc="268438093" symbol="&lt;init&gt;"/>
+<entry filename="Rez" lineNum="13" pc="268437350" symbol="initialize"/>
+<entry filename="Rez" lineNum="14" pc="268437372" symbol="initialize"/>
+<entry filename="Rez" lineNum="21" pc="268438052" symbol="&lt;init&gt;"/>
+<entry filename="Rez" lineNum="22" pc="268438061" symbol="&lt;init&gt;"/>
+<entry filename="Rez" lineNum="31" pc="268437397" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="32" pc="268437411" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="33" pc="268437521" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="34" pc="268437536" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="35" pc="268437588" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="36" pc="268437676" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="37" pc="268437728" symbol="MainLayout"/>
+<entry filename="Rez" lineNum="47" pc="268437758" symbol="ActivityLayout"/>
+<entry filename="Rez" lineNum="48" pc="268437772" symbol="ActivityLayout"/>
+<entry filename="Rez" lineNum="49" pc="268437882" symbol="ActivityLayout"/>
+<entry filename="Rez" lineNum="50" pc="268437897" symbol="ActivityLayout"/>
+<entry filename="Rez" lineNum="51" pc="268437949" symbol="ActivityLayout"/>
 </pcToLineNum>
 <symbolTable>
+<entry id="23" method="true" symbol="ActivityLayout"/>
 <entry id="8389359" symbol="&lt;gre&gt;"/>
 <entry id="8389061" symbol="mMode"/>
 <entry field="true" id="8388831" symbol="SPORT_RUNNING"/>
@@ -48,7 +123,6 @@
 <entry id="8389115" symbol="mMessage"/>
 <entry field="true" id="8388810" symbol="INVALID_HTTP_HEADER_FIELDS_IN_REQUEST"/>
 <entry id="8388924" module="true" symbol="Gregorian"/>
-<entry id="9" object="true" symbol="CommuteTrackerMenuDelegate"/>
 <entry field="true" id="8389055" symbol="POP_VIEW"/>
 <entry id="8389316" symbol="radians"/>
 <entry field="true" id="8388738" symbol="currentSpeed"/>
@@ -62,13 +136,14 @@
 <entry id="8388662" method="true" symbol="testContinue"/>
 <entry field="true" id="8389149" symbol="restingHeartRate"/>
 <entry id="8388644" module="true" symbol="System"/>
+<entry id="26" symbol="isMoving"/>
 <entry field="true" id="8388876" symbol="SUB_SPORT_CARDIO_TRAINING"/>
 <entry field="true" id="8389443" symbol="WEIGHT_SCALE_GENDER_MALE"/>
 <entry id="8389358" symbol="&lt;deu&gt;"/>
 <entry id="8389548" symbol="&lt;tha&gt;"/>
 <entry field="true" id="8388807" symbol="BLE_REQUEST_TOO_LARGE"/>
 <entry id="8388819" method="true" symbol="makeImageRequest"/>
-<entry id="12" module="true" symbol="Menus"/>
+<entry id="17" module="true" symbol="Menus"/>
 <entry id="3" module="true" symbol="globals_Rez_Drawables"/>
 <entry id="8388630" module="true" symbol="Toybox_Position"/>
 <entry id="8389354" symbol="&lt;dut&gt;"/>
@@ -113,12 +188,14 @@
 <entry id="8388659" method="true" symbol="testAbs"/>
 <entry field="true" id="8388989" symbol="dutyCycle"/>
 <entry id="8389043" object="true" symbol="ProgressBar"/>
-<entry field="true" id="18" symbol="AppName"/>
+<entry field="true" id="24" symbol="AppName"/>
 <entry field="true" id="8388927" symbol="SECONDS_PER_YEAR"/>
 <entry id="8389418" object="true" symbol="CommonData"/>
 <entry id="8389114" method="true" symbol="getType"/>
+<entry field="true" id="8" symbol="activityView"/>
 <entry field="true" id="8389427" symbol="BIKE_POWER_SENSOR_TYPE_POWER_ONLY"/>
 <entry id="8389032" object="true" symbol="ConfirmationDelegate"/>
+<entry id="32" symbol="history"/>
 <entry field="true" id="8389520" symbol="manufacturerId"/>
 <entry id="8388614" module="true" symbol="Toybox_Activity"/>
 <entry id="8389177" method="true" symbol="clear"/>
@@ -129,10 +206,11 @@
 <entry id="8389184" method="true" symbol="drawLine"/>
 <entry id="8389250" symbol="timestamp"/>
 <entry id="8388877" method="true" symbol="createSession"/>
-<entry field="true" id="14" symbol="LauncherIcon"/>
+<entry field="true" id="19" symbol="LauncherIcon"/>
 <entry id="8388616" module="true" symbol="Toybox_Communications"/>
 <entry field="true" id="8389380" symbol="OBSCURE_TOP"/>
 <entry field="true" id="8389201" symbol="MSG_ID_SEARCH_TIMEOUT"/>
+<entry id="15" object="true" symbol="CommuteActivityDelegate"/>
 <entry id="8389057" method="true" symbol="pageCtrlNative"/>
 <entry id="8389493" method="true" symbol="getWeightScaleStatus"/>
 <entry id="8388649" module="true" symbol="Test"/>
@@ -161,6 +239,7 @@
 <entry field="true" id="8388833" symbol="SPORT_TRANSITION"/>
 <entry id="8388620" module="true" symbol="Toybox_Time"/>
 <entry id="8389468" symbol="DEVICE_TYPE_GEOCACHE"/>
+<entry id="16" object="true" symbol="ActivityConfirmationDelegate"/>
 <entry field="true" id="8388848" symbol="SPORT_MULTISPORT"/>
 <entry field="true" id="8388804" symbol="BLE_NO_DATA"/>
 <entry field="true" id="8388892" symbol="name"/>
@@ -184,6 +263,7 @@
 <entry id="8388699" method="true" symbol="stop"/>
 <entry field="true" id="8388855" symbol="SUB_SPORT_SPIN"/>
 <entry id="8388668" method="true" symbol="testBitwiseOr"/>
+<entry id="30" symbol="lastTimeMoving"/>
 <entry id="8389320" symbol="february"/>
 <entry field="true" id="8388838" symbol="SPORT_TENNIS"/>
 <entry field="true" id="8388961" symbol="power"/>
@@ -238,7 +318,7 @@
 <entry id="8389142" method="true" symbol="getProfile"/>
 <entry id="8389188" method="true" symbol="fillRectangle"/>
 <entry id="8388729" object="true" symbol="Info"/>
-<entry id="13" module="true" symbol="Layouts"/>
+<entry id="18" module="true" symbol="Layouts"/>
 <entry id="8388710" object="true" symbol="Stats"/>
 <entry field="true" id="8389152" symbol="FONT_XTINY"/>
 <entry id="8389189" method="true" symbol="fillRoundedRectangle"/>
@@ -247,6 +327,7 @@
 <entry field="true" id="8388830" symbol="SPORT_GENERIC"/>
 <entry field="true" id="8388999" symbol="KEY_DOWN_LEFT"/>
 <entry id="8388885" method="true" symbol="getGeometry"/>
+<entry id="31" method="true" symbol="updateActivityStats"/>
 <entry id="8389082" method="true" symbol="onNextMode"/>
 <entry id="8389279" method="true" symbol="onStart"/>
 <entry field="true" id="8389419" symbol="DEVICE_STATE_DEAD"/>
@@ -306,6 +387,7 @@
 <entry id="8389132" method="true" symbol="setFont"/>
 <entry field="true" id="8389519" symbol="torque"/>
 <entry field="true" id="8389529" symbol="userProfileSelected"/>
+<entry id="25" symbol="timer"/>
 <entry field="true" id="8389039" symbol="NUMBER_PICKER_CALORIES"/>
 <entry id="8389541" method="true" symbol="onCancel"/>
 <entry field="true" id="8388968" symbol="TONE_STOP"/>
@@ -390,6 +472,7 @@
 <entry id="8389491" method="true" symbol="getCapabilities"/>
 <entry field="true" id="8389301" symbol="LOCATION_CONTINUOUS"/>
 <entry id="8389318" symbol="semicircles"/>
+<entry id="29" symbol="lastTimeStopped"/>
 <entry field="true" id="8388940" symbol="year"/>
 <entry field="true" id="8388723" symbol="timeZoneOffset"/>
 <entry field="true" id="8389272" symbol="searchTimeoutLowPriority"/>
@@ -418,8 +501,6 @@
 <entry field="true" id="8389524" symbol="swRevisionSupplemental"/>
 <entry field="true" id="8388851" symbol="SUB_SPORT_TREADMILL"/>
 <entry id="8389398" method="true" symbol="getDeviceSettings"/>
-<entry id="20" symbol="item_2"/>
-<entry id="19" symbol="item_1"/>
 <entry field="true" id="8389238" symbol="network"/>
 <entry id="8388639" module="true" symbol="Graphics"/>
 <entry field="true" id="8389502" symbol="rightPedalIndicator"/>
@@ -438,7 +519,7 @@
 <entry id="8389285" method="true" symbol="clearProperties"/>
 <entry field="true" id="8388834" symbol="SPORT_FITNESS_EQUIPMENT"/>
 <entry id="8389369" symbol="&lt;spa&gt;"/>
-<entry id="16" object="true" symbol="MainMenu"/>
+<entry id="21" object="true" symbol="MainMenu"/>
 <entry id="8388788" method="true" symbol="put"/>
 <entry id="8389537" object="true" symbol="TextPicker"/>
 <entry id="8389183" method="true" symbol="drawBitmap"/>
@@ -446,6 +527,7 @@
 <entry id="8389441" object="true" symbol="Geocache"/>
 <entry field="true" id="8389054" symbol="PUSH_VIEW"/>
 <entry id="8388664" method="true" symbol="testSub"/>
+<entry id="11" object="true" symbol="MainView"/>
 <entry field="true" id="8388875" symbol="SUB_SPORT_INDOOR_SKIING"/>
 <entry field="true" id="8389270" symbol="messagePeriod"/>
 <entry field="true" id="8389426" symbol="BIKE_POWER_SENSOR_TYPE_NONE"/>
@@ -454,7 +536,6 @@
 <entry field="true" id="8389530" symbol="userProfileExchangeSupport"/>
 <entry id="8389236" object="true" symbol="Message"/>
 <entry field="true" id="8388740" symbol="maxSpeed"/>
-<entry id="8" object="true" symbol="CommuteTrackerView"/>
 <entry id="8389322" symbol="april"/>
 <entry id="8389304" method="true" symbol="testInfoString"/>
 <entry field="true" id="8388839" symbol="SPORT_AMERICAN_FOOTBALL"/>
@@ -480,6 +561,7 @@
 <entry field="true" id="8389311" symbol="accuracy"/>
 <entry field="true" id="8389218" symbol="MSG_CODE_EVENT_TX"/>
 <entry id="8389277" symbol="mProperties"/>
+<entry field="true" id="9" symbol="activityDelegate"/>
 <entry field="true" id="8389461" symbol="WEIGHT_SCALE_STATUS_COMPLETE"/>
 <entry id="8389439" object="true" symbol="BikePower"/>
 <entry id="8389257" method="true" symbol="close"/>
@@ -497,6 +579,7 @@
 <entry id="8389113" method="true" symbol="getCoordinates"/>
 <entry id="8389352" symbol="&lt;ces&gt;"/>
 <entry id="8389088" method="true" symbol="setDisplayString"/>
+<entry id="28" symbol="totalTimeSpentMoving"/>
 <entry id="8389137" method="true" symbol="compute"/>
 <entry id="8388901" method="true" symbol="rand"/>
 <entry id="8388617" module="true" symbol="Toybox_ActivityRecording"/>
@@ -595,6 +678,7 @@
 <entry id="8389372" symbol="&lt;chs&gt;"/>
 <entry id="8388793" method="true" symbol="keys"/>
 <entry id="8389348" symbol="font"/>
+<entry id="27" symbol="totalTimeSpentStopped"/>
 <entry id="8389280" method="true" symbol="getInitialView"/>
 <entry field="true" id="8388870" symbol="SUB_SPORT_STRENGTH_TRAINING"/>
 <entry field="true" id="8388858" symbol="SUB_SPORT_MOUNTAIN"/>
@@ -628,6 +712,7 @@
 <entry id="8389128" symbol="mFont"/>
 <entry id="8388784" symbol="mLow"/>
 <entry field="true" id="8388928" symbol="SECONDS_PER_DAY"/>
+<entry id="14" object="true" symbol="CommuteActivityView"/>
 <entry field="true" id="8388814" symbol="INVALID_HTTP_BODY_IN_NETWORK_RESPONSE"/>
 <entry field="true" id="8389048" symbol="SLIDE_UP"/>
 <entry field="true" id="8388973" symbol="TONE_INTERVAL_ALERT"/>
@@ -679,7 +764,7 @@
 <entry field="true" id="8388736" symbol="currentLocation"/>
 <entry field="true" id="8388916" symbol="startOfDay"/>
 <entry field="true" id="8388752" symbol="maxCadence"/>
-<entry id="10" object="true" symbol="CommuteTrackerApp"/>
+<entry id="12" object="true" symbol="CommuteTrackerApp"/>
 <entry id="8389338" symbol="minute"/>
 <entry id="8389086" symbol="mProgressValue"/>
 <entry field="true" id="8389199" symbol="MSG_ID_CHANNEL_ID"/>
@@ -727,7 +812,7 @@
 <entry field="true" id="8388812" symbol="INVALID_HTTP_METHOD_IN_REQUEST"/>
 <entry id="8389182" method="true" symbol="drawRoundedRectangle"/>
 <entry field="true" id="8389297" symbol="QUALITY_GOOD"/>
-<entry id="17" method="true" symbol="MainLayout"/>
+<entry id="22" method="true" symbol="MainLayout"/>
 <entry field="true" id="8389472" symbol="rightTorqueEffectiveness"/>
 <entry field="true" id="8389228" symbol="MSG_CODE_EVENT_QUE_OVERFLOW"/>
 <entry field="true" id="8388832" symbol="SPORT_CYCLING"/>
@@ -861,7 +946,7 @@
 <entry id="8389062" symbol="mInitialValue"/>
 <entry field="true" id="8389471" symbol="leftTorqueEffectiveness"/>
 <entry field="true" id="8388991" symbol="KEY_LIGHT"/>
-<entry id="11" object="true" symbol="CommuteTrackerDelegate"/>
+<entry id="13" object="true" symbol="CommuteTrackerDelegate"/>
 <entry field="true" id="8389139" symbol="GENDER_FEMALE"/>
 <entry field="true" id="8389245" symbol="deviceType"/>
 <entry field="true" id="8389209" symbol="MSG_ID_RESET_SYSTEM"/>
@@ -875,7 +960,7 @@
 <entry id="8389195" symbol="mDrawContext"/>
 <entry field="true" id="8389196" symbol="MSG_ID_RF_EVENT"/>
 <entry field="true" id="8389457" symbol="WEIGHT_SCALE_STATUS_SEARCH_TIMEOUT"/>
-<entry field="true" id="15" symbol="id_monkey"/>
+<entry field="true" id="20" symbol="id_monkey"/>
 <entry id="8389123" method="true" symbol="onShow"/>
 <entry field="true" id="8389273" symbol="searchTimeoutHighPriority"/>
 <entry id="8389253" symbol="setPayloadWithOffset"/>
@@ -919,6 +1004,7 @@
 <entry id="8388683" method="true" symbol="testLog"/>
 <entry field="true" id="8388913" symbol="stepGoal"/>
 <entry id="8388790" method="true" symbol="hasKey"/>
+<entry id="10" object="true" symbol="MainMenuDelegate"/>
 <entry id="8389365" symbol="&lt;por&gt;"/>
 <entry field="true" id="8389038" symbol="NUMBER_PICKER_HEIGHT"/>
 <entry id="8388702" method="true" symbol="initialize"/>
@@ -973,6 +1059,10 @@
 <localVars/>
 <annotations/>
 <functions>
+<functionEntry name="onMenuItem">
+<param id="item"/>
+<documentation/>
+</functionEntry>
 <functionEntry name="onLayout">
 <param id="dc"/>
 <documentation><![CDATA[<div class="description"> Load your resources here<br/></div>]]></documentation>
@@ -987,10 +1077,6 @@
 <functionEntry name="onHide">
 <documentation><![CDATA[<div class="description"> Called when this View is removed from the screen. Save the<br/> state of your app here.<br/></div>]]></documentation>
 </functionEntry>
-<functionEntry name="onMenuItem">
-<param id="item"/>
-<documentation/>
-</functionEntry>
 <functionEntry name="onStart">
 <documentation><![CDATA[<div class="description"> onStart() is called on application start up<br/></div>]]></documentation>
 </functionEntry>
@@ -1003,10 +1089,39 @@
 <functionEntry name="onMenu">
 <documentation/>
 </functionEntry>
+<functionEntry name="onLayout">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Load your resources here<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry name="onShow">
+<documentation><![CDATA[<div class="description"> Restore the state of the app and prepare the view to be shown<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry name="onUpdate">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Update the view<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry name="onHide">
+<documentation><![CDATA[<div class="description"> Called when this View is removed from the screen. Save the<br/> state of your app here.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry name="updateActivityStats">
+<documentation/>
+</functionEntry>
+<functionEntry name="onKey">
+<param id="keyEvent"/>
+<documentation/>
+</functionEntry>
+<functionEntry name="onResponse">
+<param id="response"/>
+<documentation/>
+</functionEntry>
 <functionEntry name="initialize">
 <documentation/>
 </functionEntry>
 <functionEntry name="MainLayout">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Draw the layout<br/> param The context<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry name="ActivityLayout">
 <param id="dc"/>
 <documentation><![CDATA[<div class="description"> Draw the layout<br/> param The context<br/></div>]]></documentation>
 </functionEntry>
