@@ -2,6 +2,9 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 
+var commuteView = null;
+
+
 class CommuteTrackerApp extends App.AppBase {
 
     //! onStart() is called on application start up
@@ -16,8 +19,9 @@ class CommuteTrackerApp extends App.AppBase {
     function getInitialView() {
         return [ new MainView(), new CommuteTrackerDelegate() ];
     }
-
 }
+
+
 
 class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 
@@ -26,5 +30,14 @@ class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
         Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
         return true;
     }
-
 }
+
+
+function getActivityView() {
+	if( commuteView == null ) {
+		commuteView= new CommuteActivityView();
+	}
+	return commuteView;
+}
+
+
