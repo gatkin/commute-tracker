@@ -2,6 +2,9 @@
 *.prg*
 bin/*
 
+# Eclipse Project files
+.project
+
 # Object files
 *.o
 *.ko
