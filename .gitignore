@@ -1,3 +1,7 @@
+# Monkey C bin files
+*.prg.*
+bin/*
+
 # Object files
 *.o
 *.ko
