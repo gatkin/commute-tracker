@@ -1,15 +1,17 @@
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using CommuteHistory as CommuteHistory;
 
 
 class MainMenuDelegate extends Ui.MenuInputDelegate {
 
     function onMenuItem(item) {
         if (item == :start) {
-    		var view = getActivityView();
+    		var view = getCommuteActivityView();
     		Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
         } else if (item == :history) {
             Sys.println("Show History");
+            Ui.pushView(new Rez.Menus.HistoryMenu(), new CommuteHistory.HistoryMenuDelegate(), Ui.SLIDE_LEFT);
         }
     }
 }

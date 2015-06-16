@@ -9,6 +9,7 @@ using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.ActivityRecording as Record;
 using Toybox.Application as App;
+using CommuteHistory as CommuteHistory;
 
 
 class CommuteActivityView extends Ui.View {
@@ -18,9 +19,8 @@ class CommuteActivityView extends Ui.View {
 	hidden var statTracker = null;
 	hidden var session = null;
 
-    //! Load your resources here
-    function onLayout(dc) {
-    	timer = new Timer.Timer();
+	function initialize() {
+		timer = new Timer.Timer();
     	statTracker = new CommuteStatTracker();
     	
     	// Start the current session
@@ -29,7 +29,10 @@ class CommuteActivityView extends Ui.View {
     		session.start();
     		Sys.println("Started Session");
           }
-    	
+	}
+
+    //! Load your resources here
+    function onLayout(dc) {
         setLayout(Rez.Layouts.ActivityLayout(dc));
     }
 
@@ -124,7 +127,7 @@ class ActivityConfirmationDelegate extends Ui.ConfirmationDelegate {
 		if (response == CONFIRM_YES) {
 			// They want to end this activity
 			Ui.popView(Ui.SLIDE_RIGHT);
-			getActivityView().endActivity();
+			getCommuteActivityView().endActivity();
 		}
 	}
 }
@@ -169,51 +172,12 @@ class CommuteStatTracker {
 	}
 	
 	function saveStats() {
-		Sys.println("Saving commute stats.");
-		var commuteTime = Time.now().subtract(commuteStartTime);
 		if( totalTimeSpentMoving == null ) {
 			// If totalTimeSpentMoving is never set, then that means
 			// we were moving for the entire commute time and never came to a stop.
+			var commuteTime = Time.now().subtract(commuteStartTime);
 			totalTimeSpentMoving = commuteTime;
 		}
-		
-		// We will aggregate commute statistics based on time of day at 15 minute intervals.
-		// Later we can see about aggregate commute stats for each day of the week or for shorter intervals.
-		var startTimeInfo = Gregorian.info(commuteStartTime, Time.FORMAT_SHORT);
-		var startMinute = null;
-		if( startTimeInfo.min > 52 || startTimeInfo.min <= 7) {
-			startMinute = "00";
-		} else if ( startTimeInfo.min > 7 && startTimeInfo.min <= 22 ) {
-			startMinute = "15";
-		} else if ( startTimeInfo.min > 22 && startTimeInfo.min <= 37 ) {
-			startMinute = "30";
-		} else {
-			startMinute = "45";
-		}
-		
-		// Use the combination of the start minute and the starting hour as a key
-		// into the object store of the stats
-		var app = App.getApp();
-		var commuteStatsKey = startTimeInfo.hour.toString() + startMinute;
-		var totalTimeKey = commuteStatsKey + "_TOTAL_TIME"; // Represents total time spent commuting.
-		var moveTimeKey = commuteStatsKey + "_MOVE_TIME"; // Represents time spent moving
-		var totalTime = app.getProperty(totalTimeKey);
-		var moveTime = app.getProperty(moveTimeKey);
-		
-		Sys.println("Key = " + commuteStatsKey);
-		Sys.println("MoveTime = " + moveTime);
-		Sys.println("totalTime = " + totalTime);
-		
-		if( totalTime == null || moveTime == null ) {
-			// This is the first commute record for this time of day.
-			totalTime = commuteTime.value();
-			moveTime = totalTimeSpentMoving.value();
-		} else {
-			totalTime += commuteTime.value();
-			moveTime += totalTimeSpentMoving.value();
-		}
-		
-		app.setProperty(totalTimeKey, totalTime);
-		app.setProperty(moveTimeKey, moveTime);
+		CommuteHistory.saveCommute( commuteStartTime, totalTimeSpentMoving );
 	}
 }

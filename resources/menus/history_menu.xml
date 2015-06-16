@@ -1,0 +1,4 @@
+<menu id="HistoryMenu">
+    <menu-item id="current">View Current</menu-item>
+    <menu-item id="other">View Other</menu-item>
+</menu>
