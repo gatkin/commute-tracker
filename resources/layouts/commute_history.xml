@@ -1,7 +1,2 @@
 <layout id="CommuteHistory" background="Gfx.COLOR_WHITE">
-	<label x="center" y="5" text="History View" color="Gfx.COLOR_RED" justification="Gfx.TEXT_JUSTIFY_CENTER" />
-	<label x="0" y="25" text="Now" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_LEFT"/>
-	<label x="0" y="50" text="Now+15" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_LEFT"/>
-	<label x="0" y="75" text="Now+30" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_LEFT"/>
-	<label x="0" y="100" text="Now+45" color="Gfx.COLOR_BLUE" justification="Gfx.TEXT_JUSTIFY_LEFT"/>
 </layout>

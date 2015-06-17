@@ -3,6 +3,7 @@ using Toybox.System as Sys;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.Application as App;
+using Toybox.Graphics as Gfx;
 
 
 module CommuteHistory {
@@ -36,15 +37,31 @@ module CommuteHistory {
 	
 	    //! Restore the state of the app and prepare the view to be shown
 	    function onShow() {
-	    	for(var i=0; i<commuteHistory.size(); i++) {
-	    		Sys.println(commuteHistory[i][:timeLabel] + ": " + commuteHistory[i][:commuteEfficiency]);
-	    	}
+	    	
 	    }
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-	        // Call the parent onUpdate function to redraw the layout
-	        View.onUpdate(dc);
+	        dc.clear();
+	        var textY = 25;
+	        var textX = 5;
+	        var font = Gfx.FONT_XTINY;
+	        var barHeight = 5;
+	        var chartBaseX = 45;
+	        var barWidth = 0;
+	        for(var i=0; i<commuteHistory.size(); i++) {
+	    		Sys.println(commuteHistory[i][:timeLabel] + ": " + commuteHistory[i][:commuteEfficiency]);
+	    		dc.drawText(textX, textY, font, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
+	    		barWidth = commuteHistory[i][:commuteEfficiency] * 100;
+	    		dc.drawRectangle(chartBaseX, textY + 8, barWidth, barHeight);
+	    		textY += 25;
+	    	}
+	    	
+	    	// Draw the graph tickmarks
+			dc.drawText(chartBaseX, textY, font, "0", Gfx.TEXT_JUSTIFY_LEFT);
+			dc.drawText(chartBaseX + 50, textY, font, "50", Gfx.TEXT_JUSTIFY_LEFT);
+			dc.drawText(chartBaseX + 100, textY, font, "100", Gfx.TEXT_JUSTIFY_LEFT);
+			dc.drawText(100, 5, font, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); // Title
 	    }
 	
 	    //! Called when this View is removed from the screen. Save the
@@ -70,9 +87,13 @@ module CommuteHistory {
 	
 	function loadCommuteHistory() {
 		var currentTime = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-		var minute = ((currentTime.min + 7) / 15) * 15; // Find the closest 15 minute mark
-		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
+		var minute = (((currentTime.min + 7) / 15) * 15); // Find the closest 15 minute mark
 		var hour = currentTime.hour;
+		if(minute == 60) {
+			minute = 0;
+			hour++;
+		}
+		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
 		
 		var app = App.getApp();
 		var commuteHistory = new [4];
