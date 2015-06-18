@@ -11,7 +11,8 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
     		Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
         } else if (item == :history) {
             Sys.println("Show History");
-            Ui.pushView(new Rez.Menus.HistoryMenu(), new CommuteHistory.HistoryMenuDelegate(), Ui.SLIDE_LEFT);
+            var view = new CommuteHistory.CommuteHistoryView();
+			Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
         }
     }
 }

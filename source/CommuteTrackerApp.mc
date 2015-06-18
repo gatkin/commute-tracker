@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using CommuteActivity as CommuteActivity;
 
 var commuteActivityView = null;
 
@@ -35,7 +36,7 @@ class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 
 function getCommuteActivityView() {
 	if( commuteActivityView == null ) {
-		commuteActivityView= new CommuteActivityView();
+		commuteActivityView= new CommuteActivity.CommuteActivityView();
 	}
 	return commuteActivityView;
 }

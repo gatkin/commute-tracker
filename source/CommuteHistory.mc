@@ -122,19 +122,25 @@ module CommuteHistory {
 		return commuteHistory;
 	}
 	
-	function saveCommute( commuteStartTime, totalTimeSpentMoving ) {
+	function saveCommute( commuteStartTime, timeMoving, timeStopped ) {
 		Sys.println("Saving commute stats.");
-		var commuteTime = Time.now().subtract(commuteStartTime);
+		var commuteTime = timeMoving + timeStopped;
 		// We will aggregate commute statistics based on time of day at 15 minute intervals.
 		// Later we can see about aggregate commute stats for each day of the week or for shorter intervals.
 		var startTimeInfo = Gregorian.info(commuteStartTime, Time.FORMAT_SHORT);
 		var minute = ((startTimeInfo.min + 7) / 15) * 15; // Find the closest 15 minute mark
+		var hour = startTimeInfo.hour;
+		if(minute == 60) {
+			minute = 0;
+			hour++;
+		}
 		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
+		var hourKey = hour.toString();
 		
 		// Use the combination of the start minute and the starting hour as a key
 		// into the object store of the stats
 		var app = App.getApp();
-		var commuteStatsKey = startTimeInfo.hour.toString() + minuteKey;
+		var commuteStatsKey = hourKey + minuteKey;
 		var totalTimeKey = commuteStatsKey + "_TOTAL_TIME"; // Represents total time spent commuting.
 		var moveTimeKey = commuteStatsKey + "_MOVE_TIME"; // Represents time spent moving
 		var totalTime = app.getProperty(totalTimeKey);
@@ -146,11 +152,11 @@ module CommuteHistory {
 		
 		if( totalTime == null || moveTime == null ) {
 			// This is the first commute record for this time of day.
-			totalTime = commuteTime.value();
-			moveTime = totalTimeSpentMoving.value();
+			totalTime = commuteTime;
+			moveTime = timeMoving;
 		} else {
-			totalTime += commuteTime.value();
-			moveTime += totalTimeSpentMoving.value();
+			totalTime += commuteTime;
+			moveTime += timeMoving;
 		}
 		
 		app.setProperty(totalTimeKey, totalTime);
