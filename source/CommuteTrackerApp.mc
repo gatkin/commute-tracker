@@ -27,7 +27,6 @@ class CommuteTrackerApp extends App.AppBase {
 class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 
     function onMenu() {
-    	Sys.println("Opening Menu");
         Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
         return true;
     }

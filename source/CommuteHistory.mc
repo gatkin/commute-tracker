@@ -42,7 +42,9 @@ module CommuteHistory {
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-	        dc.clear();
+	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
+			dc.clear();
+			dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
 	        var textY = 25;
 	        var textX = 5;
 	        var font = Gfx.FONT_XTINY;
@@ -78,7 +80,7 @@ module CommuteHistory {
 	class CommuteHistoryInputDelegate extends Ui.InputDelegate {
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
-			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
+			if(key == Ui.KEY_ESC ) {
 				// Take them back to the previous page
 				Ui.popView(Ui.SLIDE_RIGHT);
 			} 

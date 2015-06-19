@@ -3,100 +3,110 @@ using Toybox.Graphics as Gfx;
 using Toybox.Position as Position;
 using Toybox.System as Sys;
 using Toybox.Timer as Timer;
-using Toybox.Activity as Activity;
 using Toybox.Math as Math;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.ActivityRecording as Record;
 using Toybox.Application as App;
 using CommuteHistory as CommuteHistory;
+using Toybox.Position as Position;
 
 
 module CommuteActivity {
 
 
 	class CommuteActivityView extends Ui.View {
+	
 		hidden const UPDATE_PERIOD_SEC = 1; // seconds
+		hidden const MIN_MOVING_SPEED = 1; // m/s
+
 		hidden var inputDelegate = null;
 		hidden var timer = null;
-		hidden var session = null;
 		hidden var timeMoving = null; // in seconds
 		hidden var timeStopped = null; // in seconds
 		hidden var commuteStartTime = null; // Moment object
 		hidden var isMoving = false;
+		hidden var isValidGPS = false;
 	
 		function initialize() {
 			timer = new Timer.Timer();
 	    	timeMoving = 0;
 	    	timeStopped = 0;
 	    	commuteStartTime = Time.now();
-	    	
-	    	// Start the current session
-	    	if( session == null || !session.isRecording() ) {
-	    		session = Record.createSession({:name => "Commute"});
-	    		session.start();
-	    		Sys.println("Started Session");
-	          }
 		}
 	
-	    //! Load your resources here
+	    //! Load resources
 	    function onLayout(dc) {
-	        setLayout(Rez.Layouts.ActivityLayout(dc));
 	    }
 	
 	    //! Restore the state of the app and prepare the view to be shown
 	    function onShow() {
 	    	timer.start(method(:updateActivity), UPDATE_PERIOD_SEC * 1000, true);
+	    	Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
 	    }
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-	    	// Update the running time of this activity
-	    	var timeMovingString = formatDuration(timeMoving);
-	    	var timeStoppedString = formatDuration(timeStopped);
-	    	var totalTimeString = formatDuration(timeMoving + timeStopped);
-			
-			Sys.println(totalTimeString);
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
+		    dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
 	        dc.clear();
-	        
-	        // Draw the timer
 	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
-	        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 4), Gfx.FONT_MEDIUM, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 4), Gfx.FONT_MEDIUM, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawText(( dc.getWidth()/2), (3*dc.getHeight() / 4), Gfx.FONT_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+	    	if( isValidGPS ) {
+		    	// Update the running time of this activity
+		    	var timeMovingString = formatDuration(timeMoving);
+		    	var timeStoppedString = formatDuration(timeStopped);
+		    	var totalTimeString = formatDuration(timeMoving + timeStopped);
+				
+		        // Draw the timer
+				dc.drawText(( dc.getWidth()/4), 0, Gfx.FONT_TINY, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawRectangle((dc.getWidth()/2), 0, 2, dc.getHeight()/2);
+		        
+		        dc.drawText(( 3*dc.getWidth()/4), 0, Gfx.FONT_TINY, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
+		        
+		        dc.drawRectangle(0,(dc.getHeight()/2), dc.getWidth(), 2);
+		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
+		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+	        } else {
+	        	dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "Wait for GPS", Gfx.TEXT_JUSTIFY_CENTER);
+	        }
 	    }
 	
-	    //! Called when this View is removed from the screen. Save the
-	    //! state of your app here.
+	    //! Called when this View is removed from the screen. 
 	    function onHide() {
 	    	timer.stop();
+	    	Position.enableLocationEvents(Position.LOCATION_DISABLE, method(:onPosition));
 	    }
 	
 		function endActivity() {
 	    	CommuteHistory.saveCommute(commuteStartTime, timeMoving, timeStopped);
-	    	session.discard();
-	    	session = null;
 		}
 	
+		///! This function runs once every 1 second. It updates the stopped and moving times
 		function updateActivity() {
-			var activityInfo = Activity.getActivityInfo();
-			if(activityInfo != null && activityInfo.currentSpeed != null) { // Check that an activity is currently running
-				if( isMoving && activityInfo.currentSpeed == 0 ) {
-					// We have just come to a stop
-					isMoving = false;
-				} else if( !isMoving && activityInfo.currentSpeed > 0 ) {
-					// We have just started moving after being stopped
-					isMoving = true;
-				}
-				
+			if( isValidGPS ) {
 				if( isMoving ) {
 					timeMoving += UPDATE_PERIOD_SEC; 
 				} else {
-					timeStopped += UPDATTE_PERIOD_SEC;
+					timeStopped += UPDATE_PERIOD_SEC;
 				}
 			}
 			Ui.requestUpdate(); // Update the timer displayed on the screen
+		}
+		
+		function onPosition(info) {
+			// Check that we have a good enough GPS fix
+			if( info.accuracy == Position.QUALITY_GOOD || info.accuracy == Position.QUALITY_USABLE ) {
+				isValidGPS = true;
+				if( info.speed < MIN_MOVING_SPEED ) {
+					isMoving = false;
+				} else {
+					isMoving = true;
+				}
+			} else {
+				// Don't update the state because the GPS fix is not good enough
+				isValidGPS = false;
+			}
 		}
 		
 		function getInputDelegate() {
@@ -105,6 +115,7 @@ module CommuteActivity {
 			}
 			return inputDelegate;
 		}
+		
 		
 		hidden function formatDuration(elapsedTime) {
 			var timeField1 = "00";

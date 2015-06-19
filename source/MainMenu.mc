@@ -10,7 +10,6 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
     		var view = getCommuteActivityView();
     		Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
         } else if (item == :history) {
-            Sys.println("Show History");
             var view = new CommuteHistory.CommuteHistoryView();
 			Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
         }
