@@ -79,7 +79,9 @@ module CommuteActivity {
 	    }
 	
 		function endActivity() {
-	    	CommuteHistory.saveCommute(commuteStartTime, timeMoving, timeStopped);
+			if( timeMoving > 0 || timeStopped > 0 ) {
+	    		CommuteHistory.saveCommute(commuteStartTime, timeMoving, timeStopped);
+    		}
 		}
 	
 		///! This function runs once every 1 second. It updates the stopped and moving times
