@@ -37,6 +37,8 @@ module CommuteHistory {
 				historyView.showNextHistoryPage();
 			} else if ( Ui.KEY_UP == key ) {
 				historyView.showPreviousHistoryPage();
+			} else if ( Ui.KEY_ESC == key ) {
+				Ui.popView(Ui.SLIDE_RIGHT);
 			}
 		}
 	}

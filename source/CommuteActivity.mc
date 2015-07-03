@@ -138,26 +138,44 @@ module CommuteActivity {
 		}
 	}
 	
+	
 	class CommuteActivityDelegate extends Ui.InputDelegate {
 	
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
 			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
 				// The user may want to exit the activity.
-				Ui.pushView(new Ui.Confirmation("End commute?"), new ActivityConfirmationDelegate(), Ui.SLIDE_IMMEDIATE);
+				Ui.pushView(new Rez.Menus.CommuteActivityMenu(), new CommuteActivityMenuDelegate(), Ui.SLIDE_IMMEDIATE);
 			} 
 		}
 	
 	}
 	
 	
-	class ActivityConfirmationDelegate extends Ui.ConfirmationDelegate {
-		function onResponse(response) {
-			if (response == CONFIRM_YES) {
-				// They want to end this activity
-				Ui.popView(Ui.SLIDE_RIGHT);
-				getCommuteActivityView().endActivity();
-			}
-		}
+	
+	class CommuteActivityMenuDelegate extends Ui.MenuInputDelegate {
+
+	    function onMenuItem(item) {
+	        if (item == :resume) {
+	        	// Do nothing, return to the activity
+	        } else if (item == :save) {
+	            Sys.println("Save");
+	            getCommuteActivityView().endActivity();
+	            Ui.popView(Ui.SLIDE_RIGHT);
+	        } else if ( item == :discard ) {
+	        	Sys.println("Discard");
+	        	Ui.popView(Ui.SLIDE_RIGHT);
+	        }
+	    }
 	}
+	
+	
+	class CommuteActivitySummaryView extends Ui.View {
+		
+		hidden var timeMoving = null; // in seconds
+		hidden var timeStopped = null; // in seconds
+		hidden var commuteStartTime = null; // Moment object
+		
+	}
+	
 }

@@ -1,0 +1,5 @@
+<menu id="CommuteActivityMenu">
+    <menu-item id="resume">Resume</menu-item>
+    <menu-item id="save">Save</menu-item>
+    <menu-item id="discard">Discard</menu-item>
+</menu>
