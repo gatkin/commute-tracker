@@ -13,36 +13,44 @@ module CommuteHistory {
 	hidden const TOTAL_TIME_KEY_EXTN = "_TOTAL_TIME"; // Extension on the key to retrieve the total time for a history entry
 	hidden const MOVE_TIME_KEY_EXTN = "_MOVE_TIME"; // Extension on the key to retrieve the move time for a history entry
 	
-	class HistoryMenuDelegate extends Ui.MenuInputDelegate {
-		function onMenuItem(item) {
-			if( item == :current ) {
-				Sys.println("Current");
-			} else {
-				Sys.println("Other");
+	
+	class CommuteHistoryController extends Ui.BehaviorDelegate {
+		
+		hidden var historyView = null;
+		
+		function initialize() {
+			historyView = new CommuteHistoryView();
+		}
+		
+		function getView() {
+			return historyView;
+		}
+		
+		function onBack() {
+			Ui.popView(Ui.SLIDE_RIGHT);
+			return true;
+		}
+		
+		function onKey(keyEvent) {
+			var key = keyEvent.getKey();
+			if( Ui.KEY_DOWN == key ) {
+				historyView.showNextHistoryPage();
+			} else if ( Ui.KEY_UP == key ) {
+				historyView.showPreviousHistoryPage();
 			}
-			var view = new CommuteHistoryView();
-			Ui.pushView(view, view.getInputDelegate(), Ui.SLIDE_LEFT);
 		}
 	}
 	
 	
-	class CommuteHistoryView extends Ui.View {
-		hidden var inputDelegate = null;
-		hidden var commuteHistory = null;
+	hidden class CommuteHistoryView extends Ui.View {
+		hidden var timeToShow = null; // For what time of day we display for the commute history
 		
 		function initialize() {
-			inputDelegate = new CommuteHistoryInputDelegate();
-			commuteHistory = loadCommuteHistory();
+			timeToShow = Time.now();
 		}
 	
-		//! Load your resources here
 	    function onLayout(dc) {
 	        setLayout(Rez.Layouts.CommuteHistory(dc));
-	    }
-	
-	    //! Restore the state of the app and prepare the view to be shown
-	    function onShow() {
-	    	
 	    }
 	
 	    //! Update the view
@@ -56,48 +64,88 @@ module CommuteHistory {
 	        var textX = 5;
 	        var barHeight = 5;
 	        var chartBaseX = 45;
+	        var maxBarWidth = 150;
 	        var barWidth = 0;
 	        
+	        var commuteHistory = loadCommuteHistory(timeToShow);
 	        for(var i=0; i<commuteHistory.size(); i++) {
 	    		Sys.println(commuteHistory[i][:timeLabel] + ": " + commuteHistory[i][:commuteEfficiency]);
 	    		dc.drawText(textX, textY, Gfx.FONT_XTINY, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
-	    		barWidth = commuteHistory[i][:commuteEfficiency] * 100;
+	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth;
 	    		dc.fillRectangle(chartBaseX, textY + 8, barWidth, barHeight);
 	    		textY += spacing;
 	    	}
 	    	
 	    	// Draw the graph tickmarks
 			dc.fillRectangle(chartBaseX-1, 30 , 1, textY - 28);
-			dc.fillRectangle(chartBaseX-1, textY, 101, 1);
+			dc.fillRectangle(chartBaseX-1, textY, maxBarWidth, 1);
 			dc.drawText(chartBaseX, textY + 2, Gfx.FONT_XTINY, "0", Gfx.TEXT_JUSTIFY_RIGHT);
-			dc.drawText(chartBaseX + 50, textY + 2, Gfx.FONT_XTINY, "50", Gfx.TEXT_JUSTIFY_RIGHT);
-			dc.drawText(chartBaseX + 100, textY + 2, Gfx.FONT_XTINY, "100", Gfx.TEXT_JUSTIFY_RIGHT);
-			dc.drawText(100, 5, Gfx.FONT_XTINY, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); // Title
+			dc.drawText(chartBaseX + maxBarWidth/2, textY + 2, Gfx.FONT_XTINY, "50", Gfx.TEXT_JUSTIFY_RIGHT);
+			dc.drawText(chartBaseX + maxBarWidth, textY + 2, Gfx.FONT_XTINY, "100", Gfx.TEXT_JUSTIFY_RIGHT);
+			
+			// Title
+			dc.drawText(115, 5, Gfx.FONT_XTINY, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); 
 	    }
 	
-	    //! Called when this View is removed from the screen. Save the
-	    //! state of your app here.
-	    function onHide() {
-	    }
 	
-		function getInputDelegate() {
-			return inputDelegate;
+		function showPreviousHistoryPage() {
+			// Decrease the time to show by one half hour
+			var durationDecrement = new Time.Duration(-1800);
+			timeToShow = timeToShow.add(durationDecrement);
+			Ui.requestUpdate();
+		}
+		
+		function showNextHistoryPage() {
+			// Decrease the time to show by one half hour
+			var durationIncrement = new Time.Duration(1800);
+			timeToShow = timeToShow.add(durationIncrement);
+			Ui.requestUpdate();
 		}
 	}
 	
 	
-	class CommuteHistoryInputDelegate extends Ui.InputDelegate {
-		function onKey(keyEvent) {
-			var key = keyEvent.getKey();
-			if(key == Ui.KEY_ESC ) {
-				// Take them back to the previous page
-				Ui.popView(Ui.SLIDE_RIGHT);
-			} 
+	
+	function saveCommute( commuteStartTime, timeMoving, timeStopped ) {
+		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
+		// Use the combination of the start minute and the starting hour as a key
+		// into the object store of the stats
+		var keyInfo = getHourMinuteForKey(commuteStartTime);
+		var minute = keyInfo[:minute];
+		var hour = keyInfo[:hour];
+		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
+		var hourKey = hour.toString();
+		
+		var commuteStatsKey = hourKey + minuteKey;
+		var totalTimeKey = commuteStatsKey + TOTAL_TIME_KEY_EXTN; // Represents total time spent commuting.
+		var moveTimeKey = commuteStatsKey + MOVE_TIME_KEY_EXTN; // Represents time spent moving
+
+		var app = App.getApp();
+		var totalTimeHistory = app.getProperty(totalTimeKey);
+		var moveTimeHistory = app.getProperty(moveTimeKey);
+		var commuteTime = timeMoving + timeStopped;
+		
+		Sys.println("Key = " + commuteStatsKey);
+		Sys.println("MoveTime = " + moveTime);
+		Sys.println("totalTime = " + totalTime);
+		
+		if( totalTime == null || moveTime == null ) {
+			// This is the first commute record for this time of day.
+			totalTimeHistory = commuteTime;
+			moveTimeHistory = timeMoving;
+		} else {
+			totalTimeHistory += commuteTime;
+			moveTimeHistory += timeMoving;
 		}
+		
+		// Save the history in the object store
+		app.setProperty(totalTimeKey, totalTimeHistory);
+		app.setProperty(moveTimeKey, moveTimeHistory);
 	}
 	
-	function loadCommuteHistory() {
-		var keyInfo = getHourMinuteForKey(Time.now());
+	
+	
+	hidden function loadCommuteHistory(timeToShow) {
+		var keyInfo = getHourMinuteForKey(timeToShow);
 		var minute = keyInfo[:minute];
 		var hour = keyInfo[:hour];
 		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
@@ -135,41 +183,6 @@ module CommuteHistory {
 			minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
 		}
 		return commuteHistory;
-	}
-	
-	function saveCommute( commuteStartTime, timeMoving, timeStopped ) {
-		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
-		var keyInfo = getHourMinuteForKey(commuteStartTime);
-		var minute = keyInfo[:minute];
-		var hour = keyInfo[:hour];
-		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
-		var hourKey = hour.toString();
-		
-		// Use the combination of the start minute and the starting hour as a key
-		// into the object store of the stats
-		var commuteTime = timeMoving + timeStopped;
-		var app = App.getApp();
-		var commuteStatsKey = hourKey + minuteKey;
-		var totalTimeKey = commuteStatsKey + TOTAL_TIME_KEY_EXTN; // Represents total time spent commuting.
-		var moveTimeKey = commuteStatsKey + MOVE_TIME_KEY_EXTN; // Represents time spent moving
-		var totalTime = app.getProperty(totalTimeKey);
-		var moveTime = app.getProperty(moveTimeKey);
-		
-		Sys.println("Key = " + commuteStatsKey);
-		Sys.println("MoveTime = " + moveTime);
-		Sys.println("totalTime = " + totalTime);
-		
-		if( totalTime == null || moveTime == null ) {
-			// This is the first commute record for this time of day.
-			totalTime = commuteTime;
-			moveTime = timeMoving;
-		} else {
-			totalTime += commuteTime;
-			moveTime += timeMoving;
-		}
-		
-		app.setProperty(totalTimeKey, totalTime);
-		app.setProperty(moveTimeKey, moveTime);
 	}
 	
 	hidden function getHourMinuteForKey(timeMoment) {

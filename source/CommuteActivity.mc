@@ -57,15 +57,15 @@ module CommuteActivity {
 		    	var totalTimeString = formatDuration(timeMoving + timeStopped);
 				
 		        // Draw the timer
-				dc.drawText(( dc.getWidth()/4), 0, Gfx.FONT_TINY, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
+				dc.drawText(( dc.getWidth()/4), 2, Gfx.FONT_TINY, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
 		        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
 		        dc.drawRectangle((dc.getWidth()/2), 0, 2, dc.getHeight()/2);
 		        
-		        dc.drawText(( 3*dc.getWidth()/4), 0, Gfx.FONT_TINY, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( 3*dc.getWidth()/4), 2, Gfx.FONT_TINY, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
 		        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
 		        
 		        dc.drawRectangle(0,(dc.getHeight()/2), dc.getWidth(), 2);
-		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
+		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2)+2, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
 		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
 	        } else {
 	        	dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "Wait for GPS", Gfx.TEXT_JUSTIFY_CENTER);
