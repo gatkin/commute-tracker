@@ -3,7 +3,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 using CommuteActivity as CommuteActivity;
 
-var commuteActivityView = null;
+var commuteActivityController = null;
 
 
 class CommuteTrackerApp extends App.AppBase {
@@ -33,11 +33,11 @@ class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 }
 
 
-function getCommuteActivityView() {
-	if( commuteActivityView == null ) {
-		commuteActivityView= new CommuteActivity.CommuteActivityView();
+function getCommuteActivityController() {
+	if( commuteActivityController == null ) {
+		commuteActivityController= new CommuteActivity.CommuteActivityController();
 	}
-	return commuteActivityView;
+	return commuteActivityController;
 }
 
 
