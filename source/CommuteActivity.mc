@@ -16,9 +16,18 @@ module CommuteActivity {
 
 	hidden const UPDATE_PERIOD_SEC = 1; // seconds
 	hidden const MIN_MOVING_SPEED = 1; // m/s
+	hidden var activityController;
+
+	function getCommuteActivityController() {
+		if( activityController == null ) {
+			Sys.println("Getting new activity controller");
+			activityController = new CommuteActivityController();
+		}
+		return activityController;
+	}
 
 
-	class CommuteActivityController {
+	hidden class CommuteActivityController {
 	
 		hidden var activityView = null;
 		hidden var activityModel = null;

@@ -1,9 +1,8 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using CommuteHistory as CommuteHistory;
 using CommuteActivity as CommuteActivity;
-
-var commuteActivityController = null;
 
 
 class CommuteTrackerApp extends App.AppBase {
@@ -23,21 +22,37 @@ class CommuteTrackerApp extends App.AppBase {
 }
 
 
-
-class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
-
-    function onMenu() {
-        Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
-        return true;
+class MainMenuDelegate extends Ui.MenuInputDelegate {
+	
+    function onMenuItem(item) {
+        if (item == :start) {
+    		var activityContoller = CommuteActivity.getCommuteActivityController();
+    		Ui.pushView(activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT);
+        } else if (item == :history) {
+            var historyController = new CommuteHistory.CommuteHistoryController();
+			Ui.pushView(historyController.getView(), controller, Ui.SLIDE_LEFT);
+        }
     }
 }
 
+class MainView extends Ui.View {
 
-function getCommuteActivityController() {
-	if( commuteActivityController == null ) {
-		commuteActivityController= new CommuteActivity.CommuteActivityController();
-	}
-	return commuteActivityController;
+    function onLayout(dc) {
+        Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
+    }
 }
+
+class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
+
+    function onKey(keyEvent) {
+		var key = keyEvent.getKey();
+		if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
+			Ui.popView(Ui.SLIDE_RIGHT);
+		} 
+	}
+}
+
+
+
 
 
