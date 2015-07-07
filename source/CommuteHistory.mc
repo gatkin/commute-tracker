@@ -74,7 +74,7 @@ module CommuteHistory {
 	        	// Draw the time label
 	    		dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	    		dc.drawText(textX, textY, Gfx.FONT_XTINY, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
-	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth;
+	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth / 100;
 	    		
 	    		// If we have a record for this time, always show a tiny bar, even if the 
 				// efficiency is zero to indicate that a record exists
@@ -84,11 +84,11 @@ module CommuteHistory {
 				
 				// Choose the color for the bar based on the efficiency
 				var barColor = Gfx.COLOR_WHITE;
-				if( commuteHistory[i][:commuteEfficiency] < 0.25 ) {
+				if( commuteHistory[i][:commuteEfficiency] < 25 ) {
 					barColor = Gfx.COLOR_RED;
-				} else if ( commuteHistory[i][:commuteEfficiency] < 0.50 ) {
+				} else if ( commuteHistory[i][:commuteEfficiency] < 50 ) {
 					barColor = Gfx.COLOR_ORANGE;
-				} else if ( commuteHistory[i][:commuteEfficiency] < 0.75 ) {
+				} else if ( commuteHistory[i][:commuteEfficiency] < 75 ) {
 					barColor = Gfx.COLOR_YELLOW;
 				} else {
 					barColor = Gfx.COLOR_GREEN;
@@ -148,7 +148,7 @@ module CommuteHistory {
 		var moveTimeHistory = app.getProperty(moveTimeKey);
 		var commuteTime = timeMoving + timeStopped;
 		
-		if( totalTime == null || moveTime == null ) {
+		if( totalTimeHistory == null || moveTimeHistory == null ) {
 			// This is the first commute record for this time of day.
 			totalTimeHistory = commuteTime;
 			moveTimeHistory = timeMoving;
@@ -186,7 +186,7 @@ module CommuteHistory {
 			} else {
 				// Check for divide by zero
 				if ( 0 != totalTime ) {
-					commuteEfficiency = moveTime / totalTime;
+					commuteEfficiency = (moveTime * 100) / totalTime;
 				} else {
 					commuteEfficiency = 0;
 				}

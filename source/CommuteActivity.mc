@@ -152,7 +152,7 @@ module CommuteActivity {
 			var efficiency = 0;
 			var totalTime = timeMoving + timeStopped;
 			if( 0 != totalTime ) {
-				efficiency = timeMoving / totalTime;
+				efficiency = (timeMoving * 100) / totalTime;
 			}
 			return efficiency;
 		}
@@ -213,13 +213,13 @@ module CommuteActivity {
 		        var efficiency = commuteModel.getCommuteEfficiency();
 		        var barColor = Gfx.COLOR_WHITE;
 		        var barWidth = 0;
-		        if( efficiency < 0.25 ) {
+		        if( efficiency < 25 ) {
 		        	barColor = Gfx.COLOR_RED;
 		        	barWidth = 0.25;
-		        } else if( efficiency < 0.50 ) {
+		        } else if( efficiency < 50 ) {
 		        	barColor = Gfx.COLOR_ORANGE;
-		        	barWidth = 0.5;
-		        } else if( efficiency < 0.75 ) {
+		        	barWidth = 0.50;
+		        } else if( efficiency < 75 ) {
 		        	barColor = Gfx.COLOR_YELLOW;
 		        	barWidth = 0.75;
 		        } else {
@@ -298,23 +298,26 @@ module CommuteActivity {
 		
 		
 		function onUpdate(dc) {
-		    dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
+		    dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
 	        dc.clear();
-	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
+	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
 	        var timeMovingString = formatDuration(timeMoving);
 	    	var timeStoppedString = formatDuration(timeStopped);
 			
-			dc.drawText(( dc.getWidth()/4), 2, Gfx.FONT_TINY, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawRectangle((dc.getWidth()/2), 0, 2, dc.getHeight()/2);
+			dc.drawText(( dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
+	        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
 	        
-	        dc.drawText(( 3*dc.getWidth()/4), 2, Gfx.FONT_TINY, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
-	        dc.drawRectangle(0,(dc.getHeight()/2), dc.getWidth(), 2);
+	        dc.drawText(( 3*dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
+	        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
 	        
 	        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2)+2, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_CENTER);
-	        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, commuteEfficiency.toString(), Gfx.TEXT_JUSTIFY_CENTER );
+	        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_HOT, commuteEfficiency.toString(), Gfx.TEXT_JUSTIFY_CENTER );
+	        
+	        // Draw the dividing bars
+			dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
+			dc.fillRectangle((dc.getWidth()/2), 0, 5, dc.getHeight()/2); // Vertical bar
+			dc.fillRectangle(0,(dc.getHeight()/2), dc.getWidth(), 5); // horizontal bar
 	      }
 	}
 	
