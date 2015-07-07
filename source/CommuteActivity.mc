@@ -15,12 +15,11 @@ using Toybox.Position as Position;
 module CommuteActivity {
 
 	hidden const UPDATE_PERIOD_SEC = 1; // seconds
-	hidden const MIN_MOVING_SPEED = 1; // m/s
+	hidden const MIN_MOVING_SPEED = 4.5; // m/s ~ 10mph
 	hidden var activityController;
 
 	function getCommuteActivityController() {
 		if( activityController == null ) {
-			Sys.println("Getting new activity controller");
 			activityController = new CommuteActivityController();
 		}
 		return activityController;
@@ -133,6 +132,10 @@ module CommuteActivity {
 			}
 		}
 		
+		function isMoving() {
+			return isMoving;
+		}
+		
 		function hasGPSFix() {
 			return isValidGPS;
 		}
@@ -143,6 +146,15 @@ module CommuteActivity {
 		
 		function getTimeStopped() {
 			return timeStopped;
+		}
+		
+		function getCommuteEfficiency() {
+			var efficiency = 0;
+			var totalTime = timeMoving + timeStopped;
+			if( 0 != totalTime ) {
+				efficiency = timeMoving / totalTime;
+			}
+			return efficiency;
 		}
 		
 	}
@@ -167,9 +179,9 @@ module CommuteActivity {
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-		    dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
+		    dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
 	        dc.clear();
-	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
+	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	    	if( commuteModel.hasGPSFix() ) {
 		    	// Update the running time of this activity
 				var timeMoving = commuteModel.getTimeMoving();
@@ -178,18 +190,47 @@ module CommuteActivity {
 		    	var timeStoppedString = formatDuration(timeStopped);
 		    	var totalTimeString = formatDuration(timeMoving + timeStopped);
 				
-		        // Draw the timer
-				dc.drawText(( dc.getWidth()/4), 2, Gfx.FONT_TINY, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawRectangle((dc.getWidth()/2), 0, 2, dc.getHeight()/2);
+
+				// Display the moving time
+				dc.drawText(( dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
 		        
-		        dc.drawText(( 3*dc.getWidth()/4), 2, Gfx.FONT_TINY, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MILD, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawRectangle(0,(dc.getHeight()/2), dc.getWidth(), 2);
+		        // Display the time stopped
+		        dc.drawText(( 3*dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
+		        
+		        // Display the total time
+		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2) + 5, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
+		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_HOT, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+		        
+		        // Draw the dividing bars
+				dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
+				dc.fillRectangle((dc.getWidth()/2), 0, 5, dc.getHeight()/2); // Vertical bar
+				dc.fillRectangle(0,(dc.getHeight()/2), dc.getWidth(), 5); // horizontal bar
+
+		        
+		        // Draw a bar along the bottom to represent commute efficiency
+		        var efficiency = commuteModel.getCommuteEfficiency();
+		        var barColor = Gfx.COLOR_WHITE;
+		        var barWidth = 0;
+		        if( efficiency < 0.25 ) {
+		        	barColor = Gfx.COLOR_RED;
+		        	barWidth = 0.25;
+		        } else if( efficiency < 0.50 ) {
+		        	barColor = Gfx.COLOR_ORANGE;
+		        	barWidth = 0.5;
+		        } else if( efficiency < 0.75 ) {
+		        	barColor = Gfx.COLOR_YELLOW;
+		        	barWidth = 0.75;
+		        } else {
+		        	barColor = Gfx.COLOR_GREEN;
+		        	barWidth = 1.0;
+		        }
+		        
+		        dc.setColor(barColor, Gfx.COLOR_TRANSPARENT);
+		        dc.fillRectangle(0, dc.getHeight() - 5, dc.getWidth() * barWidth, 5);
 		        
 		        
-		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2)+2, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
-		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
 	        } else {
 	        	dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "Wait for GPS", Gfx.TEXT_JUSTIFY_CENTER);
 	        }
@@ -223,10 +264,8 @@ module CommuteActivity {
 	        if (item == :resume) {
 	        	// Do nothing, return to the activity
 	        } else if (item == :save) {
-	            Sys.println("Save");
 	            getCommuteActivityController().saveActivity();
 	        } else if ( item == :discard ) {
-	        	Sys.println("Discard");
 				getCommuteActivityController().discardActivity();
 	        }
 	    }

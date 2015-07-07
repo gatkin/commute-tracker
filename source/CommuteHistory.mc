@@ -57,9 +57,9 @@ module CommuteHistory {
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_BLACK );
-			dc.clear();
-			dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
+	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
+	        dc.clear();
+	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
 	        var spacing = 100 / (60 / HISTORY_RESOLUTION);
 	        var textY = 25;
@@ -71,14 +71,36 @@ module CommuteHistory {
 	        
 	        var commuteHistory = loadCommuteHistory(timeToShow);
 	        for(var i=0; i<commuteHistory.size(); i++) {
-	    		Sys.println(commuteHistory[i][:timeLabel] + ": " + commuteHistory[i][:commuteEfficiency]);
+	        	// Draw the time label
+	    		dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	    		dc.drawText(textX, textY, Gfx.FONT_XTINY, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
 	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth;
+	    		
+	    		// If we have a record for this time, always show a tiny bar, even if the 
+				// efficiency is zero to indicate that a record exists
+				if( commuteHistory[i][:hasRecord] && 0 == commuteHistory[i][:commuteEfficiency] ) {
+					barWidth = 2;
+				} 
+				
+				// Choose the color for the bar based on the efficiency
+				var barColor = Gfx.COLOR_WHITE;
+				if( commuteHistory[i][:commuteEfficiency] < 0.25 ) {
+					barColor = Gfx.COLOR_RED;
+				} else if ( commuteHistory[i][:commuteEfficiency] < 0.50 ) {
+					barColor = Gfx.COLOR_ORANGE;
+				} else if ( commuteHistory[i][:commuteEfficiency] < 0.75 ) {
+					barColor = Gfx.COLOR_YELLOW;
+				} else {
+					barColor = Gfx.COLOR_GREEN;
+				}
+				
+				dc.setColor(barColor, Gfx.COLOR_TRANSPARENT);
 	    		dc.fillRectangle(chartBaseX, textY + 8, barWidth, barHeight);
 	    		textY += spacing;
 	    	}
 	    	
 	    	// Draw the graph tickmarks
+			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 			dc.fillRectangle(chartBaseX-1, 30 , 1, textY - 28);
 			dc.fillRectangle(chartBaseX-1, textY, maxBarWidth, 1);
 			dc.drawText(chartBaseX, textY + 2, Gfx.FONT_XTINY, "0", Gfx.TEXT_JUSTIFY_RIGHT);
@@ -126,10 +148,6 @@ module CommuteHistory {
 		var moveTimeHistory = app.getProperty(moveTimeKey);
 		var commuteTime = timeMoving + timeStopped;
 		
-		Sys.println("Key = " + commuteStatsKey);
-		Sys.println("MoveTime = " + moveTime);
-		Sys.println("totalTime = " + totalTime);
-		
 		if( totalTime == null || moveTime == null ) {
 			// This is the first commute record for this time of day.
 			totalTimeHistory = commuteTime;
@@ -157,25 +175,39 @@ module CommuteHistory {
 		var commuteHistory = new [recordsPerHour];
 		for(var i=0; i<recordsPerHour; i++) {
 			var objectStoreKey = hour.toString() + minuteKey;
-			Sys.println("objectStoreKey = " + objectStoreKey);
 			var totalTime = app.getProperty(objectStoreKey + TOTAL_TIME_KEY_EXTN);
 			var moveTime = app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN);
 			var commuteEfficiency = null; // moveTime / totalTime
-			if( totalTime == null || moveTime == null || totalTime == 0 ) {
+			var hasRecord = false;
+			if( totalTime == null || moveTime == null ) {
 				// We don't have a record yet for this time slot.
+				hasRecord = false;
 				commuteEfficiency = 0;
 			} else {
-				commuteEfficiency = moveTime / totalTime;
+				// Check for divide by zero
+				if ( 0 != totalTime ) {
+					commuteEfficiency = moveTime / totalTime;
+				} else {
+					commuteEfficiency = 0;
+				}
+				hasRecord = true;
 			}
-			var timeString = "";
+			
+			
 			// Convert to 12 hour time
-			var hourKey = hour % 12;
-			if( hourKey == 0 ) {
+			var hourKey = hour;
+			var meridian = "a";
+			if( hour == 12 ) {
+				meridian = "p";
+			} else if ( hour > 12 && hour < 24 ) {
+				meridian = "p";
+				hourKey = hour % 12;
+			} else if ( hour == 0 ) { // midnight
 				hourKey = 12;
 			}
 			
-			timeString = hourKey.toString() + ":" + minuteKey;
-			commuteHistory[i] = {:timeLabel => timeString, :commuteEfficiency => commuteEfficiency};
+			var timeString = hourKey.toString() + ":" + minuteKey + meridian;
+			commuteHistory[i] = {:timeLabel => timeString, :commuteEfficiency => commuteEfficiency, :hasRecord => hasRecord};
 			
 			minute += HISTORY_RESOLUTION;
 			if( minute == 60 ) {
@@ -194,7 +226,7 @@ module CommuteHistory {
 		var hour = timeInfo.hour;
 		if(minute == 60) {
 			minute = 0;
-			hour++;
+			hour = (hour + 1) % 24;
 		}
 		return {:hour => hour, :minute => minute};
 	}

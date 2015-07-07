@@ -30,7 +30,7 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
     		Ui.pushView(activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT);
         } else if (item == :history) {
             var historyController = new CommuteHistory.CommuteHistoryController();
-			Ui.pushView(historyController.getView(), controller, Ui.SLIDE_LEFT);
+			Ui.pushView(historyController.getView(), historyController, Ui.SLIDE_LEFT);
         }
     }
 }
