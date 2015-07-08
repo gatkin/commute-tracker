@@ -153,7 +153,7 @@ module CommuteActivity {
 				// Update the total distance travelled by integrating the speed over time
 				if( null != lastGPSFixTime ) {
 				    // deltaTime is in seconds, speed is in meters / second
-					var deltaTime = info.when.subtract(lastGPSFixTime).value;
+					var deltaTime = info.when.subtract(lastGPSFixTime).value();
 					totalDistance += info.speed * deltaTime;
 				}
 				
