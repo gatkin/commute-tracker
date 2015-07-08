@@ -4,6 +4,7 @@ using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.Application as App;
 using Toybox.Graphics as Gfx;
+using CommuteTrackerUtil as CommuteTrackerUtil;
 
 
 module CommuteHistory {
@@ -74,7 +75,7 @@ module CommuteHistory {
 	        	// Draw the time label
 	    		dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	    		dc.drawText(textX, textY, Gfx.FONT_XTINY, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
-	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth / 100;
+	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth / 100.0;
 	    		
 	    		// If we have a record for this time, always show a tiny bar, even if the 
 				// efficiency is zero to indicate that a record exists
@@ -133,15 +134,12 @@ module CommuteHistory {
 		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
 		// Use the combination of the start minute and the starting hour as a key
 		// into the object store of the stats
-		var keyInfo = getHourMinuteForKey(commuteStartTime);
+		var keyInfo = getKeyForMoment(commuteStartTime);
 		var minute = keyInfo[:minute];
 		var hour = keyInfo[:hour];
-		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
-		var hourKey = hour.toString();
 		
-		var commuteStatsKey = hourKey + minuteKey;
-		var totalTimeKey = commuteStatsKey + TOTAL_TIME_KEY_EXTN; // Represents total time spent commuting.
-		var moveTimeKey = commuteStatsKey + MOVE_TIME_KEY_EXTN; // Represents time spent moving
+		var totalTimeKey = keyInfo[:objectStoreKey] + TOTAL_TIME_KEY_EXTN; // Represents total time spent commuting.
+		var moveTimeKey = keyInfo[:objectStoreKey] + MOVE_TIME_KEY_EXTN; // Represents time spent moving
 
 		var app = App.getApp();
 		var totalTimeHistory = app.getProperty(totalTimeKey);
@@ -165,18 +163,20 @@ module CommuteHistory {
 	
 	
 	hidden function loadCommuteHistory(timeToShow) {
-		var keyInfo = getHourMinuteForKey(timeToShow);
+		var keyInfo = getKeyForMoment(timeToShow);
 		var minute = keyInfo[:minute];
 		var hour = keyInfo[:hour];
-		var minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
 		
 		var app = App.getApp();
 		var recordsPerHour = 60 / HISTORY_RESOLUTION;
 		var commuteHistory = new [recordsPerHour];
 		for(var i=0; i<recordsPerHour; i++) {
-			var objectStoreKey = hour.toString() + minuteKey;
+		
+			// Retrive the values from the object store
+			var objectStoreKey = getKeyForHourMinute(hour, minute);
 			var totalTime = app.getProperty(objectStoreKey + TOTAL_TIME_KEY_EXTN);
 			var moveTime = app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN);
+			
 			var commuteEfficiency = null; // moveTime / totalTime
 			var hasRecord = false;
 			if( totalTime == null || moveTime == null ) {
@@ -193,33 +193,21 @@ module CommuteHistory {
 				hasRecord = true;
 			}
 			
-			
-			// Convert to 12 hour time
-			var hourKey = hour;
-			var meridian = "a";
-			if( hour == 12 ) {
-				meridian = "p";
-			} else if ( hour > 12 && hour < 24 ) {
-				meridian = "p";
-				hourKey = hour % 12;
-			} else if ( hour == 0 ) { // midnight
-				hourKey = 12;
-			}
-			
-			var timeString = hourKey.toString() + ":" + minuteKey + meridian;
-			commuteHistory[i] = {:timeLabel => timeString, :commuteEfficiency => commuteEfficiency, :hasRecord => hasRecord};
+			var timeLabel = CommuteTrackerUtil.formatTime(hour, minute);
+			commuteHistory[i] = {:timeLabel => timeLabel, :commuteEfficiency => commuteEfficiency, :hasRecord => hasRecord};
 			
 			minute += HISTORY_RESOLUTION;
 			if( minute == 60 ) {
 				hour = ( hour + 1 ) % 24;
 				minute = 0;
 			}
-			minuteKey = (minute < 10) ? ("0" + minute) : (minute.toString());
 		}
 		return commuteHistory;
 	}
 	
-	hidden function getHourMinuteForKey(timeMoment) {
+	///! Returns the hour, minute, and objectStoreKey for the given moment
+    ///! to be used to save and access data in the object store
+	hidden function getKeyForMoment(timeMoment) {
 		var timeInfo = Gregorian.info(timeMoment, Time.FORMAT_SHORT);
 		// Find the closest HISTORY_RESOLUTION minute to the current time
 		var minute = ((timeInfo.min + (HISTORY_RESOLUTION/2)) / HISTORY_RESOLUTION ) * HISTORY_RESOLUTION ; 
@@ -228,7 +216,14 @@ module CommuteHistory {
 			minute = 0;
 			hour = (hour + 1) % 24;
 		}
-		return {:hour => hour, :minute => minute};
+		var objectStoreKey = getKeyForHourMinute(hour, minute);
+		return {:hour => hour, :minute => minute, :objectStoreKey => objectStoreKey};
+	}
+	
+	///! Returns a string representing the object store key used to access data in the object store
+    ///! The key is unique for each hour/minute combination
+	hidden function getKeyForHourMinute(hour, minute) {
+		return hour.toString() + "_" + minute.toString();
 	}
 	
 }
