@@ -53,7 +53,8 @@ module CommuteActivity {
 				// Remove the activity view
 	            Ui.popView(Ui.SLIDE_RIGHT);
 			
-				activityModel.endActivity();
+				activityModel.pauseActivity(); // Stop the timer and position updates
+	    		CommuteHistory.saveCommute(activityModel);
             
 	            // Show the activity summary
 	            var summaryView = new CommuteSummaryView(activityModel);
@@ -111,13 +112,6 @@ module CommuteActivity {
 	    	Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:onPosition));
 		}
 		
-		function endActivity() {
-			pauseActivity(); // Stop the timer and position updates
-			if( timeMoving > 0 || timeStopped > 0 ) {
-	    		CommuteHistory.saveCommute(commuteStartTime, timeMoving, timeStopped);
-    		}
-		}
-		
 		///! This function runs once every 1 second. It updates the stopped and moving times
 		function updateActivity() {
 			if( isValidGPS ) {
@@ -135,13 +129,14 @@ module CommuteActivity {
 			if( info.accuracy != Position.QUALITY_NOT_AVAILABLE ) {
 				isValidGPS = true;
 				
-				// Check if we have acheived a new maximum speed
-				if( info.speed > maxSpeed ) {
-					maxSpeed = info.speed;
-				}
-				
 				if( info.speed > MIN_MOVING_SPEED ) {
 					isMoving = true;
+					
+					// Check if we have acheived a new maximum speed
+					if( info.speed > maxSpeed ) {
+						maxSpeed = info.speed;
+					}
+					
 				} else {
 					// Check if we have just come to a stop
 					if( isMoving ) {
@@ -184,6 +179,7 @@ module CommuteActivity {
 		function getCommuteEfficiency() {
 			var efficiency = 0;
 			var totalTime = timeMoving + timeStopped;
+			// Check for divide by zero
 			if( 0 != totalTime ) {
 				efficiency = (timeMoving * 100) / totalTime;
 			}
@@ -358,7 +354,7 @@ module CommuteActivity {
 
 			// Parameters for drawing the data fields
 			var labelXPosn = dc.getWidth() / 8;
-			var valueXPosn = 3 * dc.getWidth() / 4;
+			var valueXPosn = 7 * dc.getWidth() / 8;
 			var verticalSpacing = 15;
 
 			// Display the total time

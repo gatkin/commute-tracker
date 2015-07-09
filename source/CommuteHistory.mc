@@ -11,8 +11,12 @@ module CommuteHistory {
 
 	//!  We group commutes that start in blocks of HISTORY_RESOLUTION minutes to store in history
 	hidden const HISTORY_RESOLUTION = 10; // In minutes
-	hidden const TOTAL_TIME_KEY_EXTN = "_TOTAL_TIME"; // Extension on the key to retrieve the total time for a history entry
-	hidden const MOVE_TIME_KEY_EXTN = "_MOVE_TIME"; // Extension on the key to retrieve the move time for a history entry
+	hidden const NUM_RECORDS_KEY_EXTN = "_NUM_RECORDS";
+	hidden const MOVE_TIME_KEY_EXTN = "_MOVE_TIME"; 
+	hidden const STOP_TIME_KEY_EXTN = "_STOP_TIME"; 
+	hidden const TOTAL_DIST_KEY_EXTN = "_TOTAL_DIST";
+	hidden const NUM_STOPS_KEY_EXTN = "_NUM_STOPS";
+	hidden const MAX_SPEED_KEY_EXTN = "_MAX_SPEED";
 	
 	
 	class CommuteHistoryController extends Ui.BehaviorDelegate {
@@ -63,14 +67,14 @@ module CommuteHistory {
 	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
 	        var spacing = 100 / (60 / HISTORY_RESOLUTION);
-	        var textY = 25;
+	        var textY = 30;
 	        var textX = 5;
 	        var barHeight = 5;
 	        var chartBaseX = 45;
 	        var maxBarWidth = 150;
 	        var barWidth = 0;
 	        
-	        var commuteHistory = loadCommuteHistory(timeToShow);
+	        var commuteHistory = loadCommuteHistoryOverview(timeToShow);
 	        for(var i=0; i<commuteHistory.size(); i++) {
 	        	// Draw the time label
 	    		dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
@@ -109,7 +113,7 @@ module CommuteHistory {
 			dc.drawText(chartBaseX + maxBarWidth, textY + 2, Gfx.FONT_XTINY, "100", Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Title
-			dc.drawText(115, 5, Gfx.FONT_XTINY, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); 
+			dc.drawText(115, 3, Gfx.FONT_SMALL, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); 
 	    }
 	
 	
@@ -121,7 +125,7 @@ module CommuteHistory {
 		}
 		
 		function showNextHistoryPage() {
-			// Decrease the time to show by one half hour
+			// Increase the time to show by one half hour
 			var durationIncrement = new Time.Duration(1800);
 			timeToShow = timeToShow.add(durationIncrement);
 			Ui.requestUpdate();
@@ -129,41 +133,116 @@ module CommuteHistory {
 	}
 	
 	
+	class CommuteHistoryDetailView extends Ui.View {
 	
-	function saveCommute( commuteStartTime, timeMoving, timeStopped ) {
-		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
-		// Use the combination of the start minute and the starting hour as a key
-		// into the object store of the stats
-		var keyInfo = getKeyForMoment(commuteStartTime);
-		var minute = keyInfo[:minute];
-		var hour = keyInfo[:hour];
-		
-		var totalTimeKey = keyInfo[:objectStoreKey] + TOTAL_TIME_KEY_EXTN; // Represents total time spent commuting.
-		var moveTimeKey = keyInfo[:objectStoreKey] + MOVE_TIME_KEY_EXTN; // Represents time spent moving
+		hidden var commuteStartTime = null; // Moment object
 
-		var app = App.getApp();
-		var totalTimeHistory = app.getProperty(totalTimeKey);
-		var moveTimeHistory = app.getProperty(moveTimeKey);
-		var commuteTime = timeMoving + timeStopped;
-		
-		if( totalTimeHistory == null || moveTimeHistory == null ) {
-			// This is the first commute record for this time of day.
-			totalTimeHistory = commuteTime;
-			moveTimeHistory = timeMoving;
-		} else {
-			totalTimeHistory += commuteTime;
-			moveTimeHistory += timeMoving;
+		function intialize( startTime ) {
+			commuteStartTime = startTime;
 		}
 		
-		// Save the history in the object store
-		app.setProperty(totalTimeKey, totalTimeHistory);
-		app.setProperty(moveTimeKey, moveTimeHistory);
+		function onUpdate(dc) {
+	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
+	        dc.clear();
+	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
+	        
+	        historyData = loadCommuteHistoryDetail( commuteStartTime );
+	     }
+		
+		
+		function showPreviousHistoryDetail() {
+			// Decrease the time to show by one half hour
+			commuteStartTime = commuteStartTime.add( -HISTORY_RESOLUTION );
+			Ui.requestUpdate();
+		}
+		
+		function showNextHistoryDetail() {
+			// Decrease the time to show by one half hour
+			commuteStartTime = commuteStartTime.add(durationIncrement);
+			Ui.requestUpdate();
+		}
+	
 	}
 	
 	
 	
-	hidden function loadCommuteHistory(timeToShow) {
-		var keyInfo = getKeyForMoment(timeToShow);
+	function saveCommute( commuteModel ) {
+		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
+		// Use the combination of the start minute and the starting hour as a key
+		// into the object store of the stats
+		var keyInfo = getKeyForMoment(commuteModel.getCommuteStartTime());
+		var objectStoreKey = keyInfo[:objectStoreKey];
+		
+		var stopTime = commuteModel.getTimeStopped();
+		var	moveTime = commuteModel.getTimeMoving();
+		var	numStops = commuteModel.getNumStops();
+		var	maxSpeed = commuteModel.getMaxSpeed();
+		var	distance = commuteModel.getTotalDistance();
+		
+		var app = App.getApp();
+		var numRecords = app.getProperty(objectStoreKey + NUM_RECORDS_KEY_EXTN);
+		if( null == numRecords || 0 == numRecords ) {
+			// This is the first commute record for this time of day.
+			numRecords = 1;
+		} else {
+			// Add the stats for this commute to the history we have for all commutes at this time of day
+			numRecords++;
+			stopTime += app.getProperty(objectStoreKey + STOP_TIME_KEY_EXTN);
+			moveTime += app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN);
+			numStops += app.getProperty(objectStoreKey + NUM_STOPS_KEY_EXTN);
+			distance += app.getProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN);
+			
+			var prevMaxSpeed = app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN);
+			if( prevMaxSpeed > maxSpeed ) {
+				maxSpeed = prevMaxSpeed;
+			}
+		}
+		
+		// Save the history in the object store
+		app.setProperty(objectStoreKey + NUM_RECORDS_KEY_EXTN, numRecords);
+		app.setProperty(objectStoreKey + STOP_TIME_KEY_EXTN, stopTime);
+		app.setProperty(objectStoreKey + MOVE_TIME_KEY_EXTN, moveTime);
+		app.setProperty(objectStoreKey + NUM_STOPS_KEY_EXTN, numStops);
+		app.setProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN, distance);
+		app.setProperty(objectStoreKey + MAX_SPEED_KEY_EXTN, maxSpeed);
+	}
+	
+	
+	hidden function loadCommuteHistoryDetail( commuteStartTime ) {
+		var keyInfo = getKeyForMoment( commuteStartTime );
+		var objectStoreKey = keyInfo[:objectStoreKey];
+		
+		var app = App.getApp();
+		var historyData = null;
+		var numRecords = app.getProperty(objectStoreKey + NUM_RECORDS_KEY_EXTN);
+		if( null == numRecords || 0 == numRecords ) {
+			// There are no records for this time of day
+			historyData = { 
+				:numRecords => 0, 
+				:stopTime => 0,
+				:moveTime => 0,
+				:numStops => 0,
+				:distance => 0,
+				:maxSpeed => 0
+			};
+
+		} else {
+			// Load the rest of the history data
+			historyData = { 
+				:numRecords => numRecords, 
+				:stopTime => app.getProperty(objectStoreKey + STOP_TIME_KEY_EXTN),
+				:moveTime => app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN),
+				:numStops => app.getProperty(objectStoreKey + NUM_STOPS_KEY_EXTN),
+				:distance => app.getProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN),
+				:maxSpeed => app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN)
+			};
+		}
+		return historyData;
+	}
+	
+	
+	hidden function loadCommuteHistoryOverview( commuteStartTime ) {
+		var keyInfo = getKeyForMoment( commuteStartTime );
 		var minute = keyInfo[:minute];
 		var hour = keyInfo[:hour];
 		
@@ -174,22 +253,20 @@ module CommuteHistory {
 		
 			// Retrive the values from the object store
 			var objectStoreKey = getKeyForHourMinute(hour, minute);
-			var totalTime = app.getProperty(objectStoreKey + TOTAL_TIME_KEY_EXTN);
+			var stopTime = app.getProperty(objectStoreKey + STOP_TIME_KEY_EXTN);
 			var moveTime = app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN);
 			
-			var commuteEfficiency = null; // moveTime / totalTime
+			var commuteEfficiency = 0; 
 			var hasRecord = false;
-			if( totalTime == null || moveTime == null ) {
+			if( stopTime == null || moveTime == null ) {
 				// We don't have a record yet for this time slot.
 				hasRecord = false;
-				commuteEfficiency = 0;
 			} else {
 				// Check for divide by zero
+				var totalTime = moveTime + stopTime;
 				if ( 0 != totalTime ) {
 					commuteEfficiency = (moveTime * 100) / totalTime;
-				} else {
-					commuteEfficiency = 0;
-				}
+				} 
 				hasRecord = true;
 			}
 			
