@@ -44,7 +44,13 @@ module CommuteHistory {
 				historyView.showPreviousHistoryPage();
 			} else if ( Ui.KEY_ESC == key ) {
 				Ui.popView(Ui.SLIDE_RIGHT);
+			} else if ( Ui.KEY_ENTER ) {
+				showHistoryDetail();
 			}
+		}
+		
+		function showHistoryDetail() {
+			
 		}
 	}
 	
@@ -130,6 +136,10 @@ module CommuteHistory {
 			timeToShow = timeToShow.add(durationIncrement);
 			Ui.requestUpdate();
 		}
+		
+		function getTimeToShow() {
+			return timeToShow;
+		}
 	}
 	
 	
@@ -147,6 +157,85 @@ module CommuteHistory {
 	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
 	        historyData = loadCommuteHistoryDetail( commuteStartTime );
+	        
+	        var startTimeString = CommuteTrackerUtil.formatTime(historyData[:startTimeHour], historyData[:startTimeMinute]);
+			
+			var currentYPosn = 2;
+			
+			// Draw the title with the current time
+			dc.drawText(( dc.getWidth()/2), currentYPosn, Gfx.FONT_SMALL, "Commute History " + startTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+			
+			
+			// Draw a green horizontal line
+			currentYPosn = 20;
+			dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT );
+			dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
+			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
+
+			// Display history data, if we have it for this time of day
+			if( historyData[:numRecords] > 0 ) {
+	
+				// Parameters for drawing the data fields
+				var labelXPosn = dc.getWidth() / 8;
+				var valueXPosn = 7 * dc.getWidth() / 8;
+				var verticalSpacing = 15;
+	
+				// Display the average total time
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Records", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, historyData[:numRecords], Gfx.TEXT_JUSTIFY_RIGHT)
+	
+				// Display the average total time
+				var totalTime = historyData[:stopTime]  + historyData[:startTime];
+				var avgTime = totalTime / historyData[:numRecords];
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgTime), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the average time moving
+				var avgMoveTime = historyData[:moveTime] / historyData[:numRecords];
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time Moving", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgMoveTime), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the average time stoped
+				var avgStopTime = historyData[:stopTime] / historyData[:numRecords];
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time Stopped", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgStopTime), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the avg distance travelled
+				var avgDistance = historyData[:distance] / historyData[:numRecords] * CommuteTrackerUtil.METERS_TO_MILES;
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Distance", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgDistance.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the max speed
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
+				var speed = historyData[:maxSpeed]  * CommuteTrackerUtil.MPS_TO_MPH;
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speed.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the number of stops
+				var avgNumStops = historyData[:numStops] / historyData[:numRecords];
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Stops", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgNumStops.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
+				
+				// Display the commute efficiency
+				var efficiency = 0;
+				// Check for divide by zero
+				if( 0 != totalTime ) {
+					efficiency = historyData[:moveTime] * 100 / totalTime;
+				}
+				currentYPosn += verticalSpacing;
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, efficiency.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
+			} else {
+				// Display that there is no data
+				dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "No Data", Gfx.TEXT_JUSTIFY_CENTER);
+			}
+	        
 	     }
 		
 		
@@ -158,7 +247,7 @@ module CommuteHistory {
 		
 		function showNextHistoryDetail() {
 			// Decrease the time to show by one half hour
-			commuteStartTime = commuteStartTime.add(durationIncrement);
+			commuteStartTime = commuteStartTime.add( HISTORY_RESOLUTION );
 			Ui.requestUpdate();
 		}
 	
@@ -223,7 +312,9 @@ module CommuteHistory {
 				:moveTime => 0,
 				:numStops => 0,
 				:distance => 0,
-				:maxSpeed => 0
+				:maxSpeed => 0,
+				:startTimeHour => keyInfo[:hour],
+				:startTimeMinute => keyInfo[:minute]
 			};
 
 		} else {
@@ -234,7 +325,9 @@ module CommuteHistory {
 				:moveTime => app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN),
 				:numStops => app.getProperty(objectStoreKey + NUM_STOPS_KEY_EXTN),
 				:distance => app.getProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN),
-				:maxSpeed => app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN)
+				:maxSpeed => app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN),
+				:startTimeHour => keyInfo[:hour],
+				:startTimeMinute => keyInfo[:minute]
 			};
 		}
 		return historyData;

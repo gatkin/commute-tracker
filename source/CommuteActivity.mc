@@ -18,8 +18,6 @@ module CommuteActivity {
 
 	hidden const UPDATE_PERIOD_SEC = 1; // [seconds]
 	hidden const MIN_MOVING_SPEED = 4.5; // [m/s] ~ 10mph
-	hidden const MPS_TO_MPH = 2.24;
-	hidden const METERS_TO_MILES = 0.0006213;
 	hidden var activityController;
 
 	function getCommuteActivityController() {
@@ -234,9 +232,9 @@ module CommuteActivity {
 		    	// Update the running time of this activity
 				var timeMoving = commuteModel.getTimeMoving();
 				var timeStopped = commuteModel.getTimeStopped();
-		    	var timeMovingString = formatDuration(timeMoving);
-		    	var timeStoppedString = formatDuration(timeStopped);
-		    	var totalTimeString = formatDuration(timeMoving + timeStopped);
+		    	var timeMovingString = CommuteTrackerUtil.CommuteTrackerUtil.formatDuration(timeMoving);
+		    	var timeStoppedString = CommuteTrackerUtil.formatDuration(timeStopped);
+		    	var totalTimeString = CommuteTrackerUtil.formatDuration(timeMoving + timeStopped);
 				
 
 				// Display the moving time
@@ -325,14 +323,9 @@ module CommuteActivity {
 			commuteModel = activityModel;
 		}
 		
-		//! Load resources
 	    function onLayout(dc) {
-	    }
-	
-		
-		
-		function onUpdate(dc) {
-		    dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
+	    
+	    	dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
 	        dc.clear();
 	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
@@ -360,28 +353,28 @@ module CommuteActivity {
 			// Display the total time
 			currentYPosn += verticalSpacing;
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, formatDuration(commuteModel.getTotalCommuteTime()), Gfx.TEXT_JUSTIFY_RIGHT);
+			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTotalCommuteTime()), Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Display the time moving
 			currentYPosn += verticalSpacing;
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Moving", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, formatDuration(commuteModel.getTimeMoving()), Gfx.TEXT_JUSTIFY_RIGHT);
+			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeMoving()), Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Display the time stoped
 			currentYPosn += verticalSpacing;
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Stopped", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, formatDuration(commuteModel.getTimeStopped()), Gfx.TEXT_JUSTIFY_RIGHT);
+			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeStopped()), Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Display the distance travelled
 			currentYPosn += verticalSpacing;
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Distance", Gfx.TEXT_JUSTIFY_LEFT);
-			var dist = commuteModel.getTotalDistance() * METERS_TO_MILES;
+			var dist = commuteModel.getTotalDistance() * CommuteTrackerUtil.METERS_TO_MILES;
 			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, dist.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Display the max speed
 			currentYPosn += verticalSpacing;
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
-			var speed = commuteModel.getMaxSpeed() * MPS_TO_MPH;
+			var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
 			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speed.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
 			
 			// Display the number of stops
@@ -394,6 +387,13 @@ module CommuteActivity {
 			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
 			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, commuteModel.getCommuteEfficiency().toString(), Gfx.TEXT_JUSTIFY_RIGHT);
 			
+	    	
+	    }
+	
+		
+		
+		function onUpdate(dc) {
+		    
 	      }
 	}
 	
@@ -408,25 +408,5 @@ module CommuteActivity {
 			} 
 		}
 	}
-	
-
-	hidden function formatDuration(elapsedTime) {
-		var timeField1 = "00";
-    	var timeField2 = "00";
-		var minutes = (elapsedTime / 60).toNumber();
-		if(minutes >= 60) {
-			// Show hours:minutes
-			timeField1 = (minutes / 60).toNumber().toString(); // Convert to hours
-			minutes %= 60;
-			timeField2 = (minutes < 10) ? ("0" + minutes.toString()) : (minutes.toString());
-		} else {
-			// Show minutes:seconds
-			timeField1 = (minutes < 10) ? ("0" + minutes.toString()) : (minutes.toString());
-			var seconds = (elapsedTime % 60).toNumber();
-			timeField2 = (seconds < 10) ? ("0" + seconds.toString()) : (seconds.toString());
-		}
-		return timeField1 + ":" + timeField2;
-	}
-
 	
 }
