@@ -232,7 +232,7 @@ module CommuteActivity {
 		    	// Update the running time of this activity
 				var timeMoving = commuteModel.getTimeMoving();
 				var timeStopped = commuteModel.getTimeStopped();
-		    	var timeMovingString = CommuteTrackerUtil.CommuteTrackerUtil.formatDuration(timeMoving);
+		    	var timeMovingString = CommuteTrackerUtil.formatDuration(timeMoving);
 		    	var timeStoppedString = CommuteTrackerUtil.formatDuration(timeStopped);
 		    	var totalTimeString = CommuteTrackerUtil.formatDuration(timeMoving + timeStopped);
 				

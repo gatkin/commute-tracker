@@ -50,7 +50,9 @@ module CommuteHistory {
 		}
 		
 		function showHistoryDetail() {
-			
+			var histDetailView = new CommuteHistoryDetailView( historyView.getTimeToShow() );
+			var histDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );
+			Ui.pushView( histDetailView, histDetailDelegate, Ui.SLIDE_LEFT );
 		}
 	}
 	
@@ -147,7 +149,7 @@ module CommuteHistory {
 	
 		hidden var commuteStartTime = null; // Moment object
 
-		function intialize( startTime ) {
+		function initialize( startTime ) {
 			commuteStartTime = startTime;
 		}
 		
@@ -156,7 +158,7 @@ module CommuteHistory {
 	        dc.clear();
 	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	        
-	        historyData = loadCommuteHistoryDetail( commuteStartTime );
+	        var historyData = loadCommuteHistoryDetail( commuteStartTime );
 	        
 	        var startTimeString = CommuteTrackerUtil.formatTime(historyData[:startTimeHour], historyData[:startTimeMinute]);
 			
@@ -174,19 +176,18 @@ module CommuteHistory {
 
 			// Display history data, if we have it for this time of day
 			if( historyData[:numRecords] > 0 ) {
-	
 				// Parameters for drawing the data fields
 				var labelXPosn = dc.getWidth() / 8;
 				var valueXPosn = 7 * dc.getWidth() / 8;
 				var verticalSpacing = 15;
 	
 				// Display the average total time
-				currentYPosn += verticalSpacing;
+				currentYPosn += 5;
 				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Records", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, historyData[:numRecords], Gfx.TEXT_JUSTIFY_RIGHT)
+				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, historyData[:numRecords].toString(), Gfx.TEXT_JUSTIFY_RIGHT);
 	
 				// Display the average total time
-				var totalTime = historyData[:stopTime]  + historyData[:startTime];
+				var totalTime = historyData[:stopTime]  + historyData[:moveTime];
 				var avgTime = totalTime / historyData[:numRecords];
 				currentYPosn += verticalSpacing;
 				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time", Gfx.TEXT_JUSTIFY_LEFT);
@@ -207,7 +208,7 @@ module CommuteHistory {
 				// Display the avg distance travelled
 				var avgDistance = historyData[:distance] / historyData[:numRecords] * CommuteTrackerUtil.METERS_TO_MILES;
 				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Distance", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Distance", Gfx.TEXT_JUSTIFY_LEFT);
 				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgDistance.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
 				
 				// Display the max speed
@@ -219,7 +220,7 @@ module CommuteHistory {
 				// Display the number of stops
 				var avgNumStops = historyData[:numStops] / historyData[:numRecords];
 				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Stops", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Stops", Gfx.TEXT_JUSTIFY_LEFT);
 				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgNumStops.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
 				
 				// Display the commute efficiency
@@ -231,6 +232,7 @@ module CommuteHistory {
 				currentYPosn += verticalSpacing;
 				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
 				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, efficiency.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
+				
 			} else {
 				// Display that there is no data
 				dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "No Data", Gfx.TEXT_JUSTIFY_CENTER);
@@ -241,19 +243,46 @@ module CommuteHistory {
 		
 		function showPreviousHistoryDetail() {
 			// Decrease the time to show by one half hour
-			commuteStartTime = commuteStartTime.add( -HISTORY_RESOLUTION );
+			var durationIncrement = new Time.Duration( -HISTORY_RESOLUTION * 60 );
+			commuteStartTime = commuteStartTime.add( durationIncrement );
 			Ui.requestUpdate();
 		}
 		
 		function showNextHistoryDetail() {
 			// Decrease the time to show by one half hour
-			commuteStartTime = commuteStartTime.add( HISTORY_RESOLUTION );
+			var durationIncrement = new Time.Duration( HISTORY_RESOLUTION * 60 );
+			commuteStartTime = commuteStartTime.add( durationIncrement );
 			Ui.requestUpdate();
 		}
 	
 	}
 	
 	
+	
+	class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
+		
+		hidden var historyDetailView = null;
+		
+		function initialize( histDetailView ) {
+			historyDetailView = histDetailView;
+		}
+		
+		function onBack() {
+			Ui.popView(Ui.SLIDE_RIGHT);
+			return true;
+		}
+		
+		function onKey(keyEvent) {
+			var key = keyEvent.getKey();
+			if( Ui.KEY_DOWN == key ) {
+				historyDetailView.showNextHistoryDetail();
+			} else if ( Ui.KEY_UP == key ) {
+				historyDetailView.showPreviousHistoryDetail();
+			} else if ( Ui.KEY_ESC == key ) {
+				Ui.popView(Ui.SLIDE_RIGHT);
+			} 
+		}
+	}
 	
 	function saveCommute( commuteModel ) {
 		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.

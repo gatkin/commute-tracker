@@ -21,7 +21,7 @@ module CommuteTrackerUtil {
 	}
 	
 	
-	hidden function formatDuration(elapsedTime) {
+	function formatDuration(elapsedTime) {
 		var timeField1 = "00";
     	var timeField2 = "00";
 		var minutes = (elapsedTime / 60).toNumber();
