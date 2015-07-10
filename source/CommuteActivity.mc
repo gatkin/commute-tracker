@@ -7,7 +7,6 @@ using Toybox.Math as Math;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.ActivityRecording as Record;
-using Toybox.Application as App;
 using CommuteHistory as CommuteHistory;
 using Toybox.Position as Position;
 using Toybox.Activity as Activity;
@@ -33,6 +32,7 @@ module CommuteActivity {
 		hidden var activityView = null;
 		hidden var activityModel = null;
 		hidden var hasActiveActivity = false;
+		hidden var summaryView = null;
 		
 		function getActivityView() {
 			activityModel = new CommuteActivityModel();
@@ -49,26 +49,31 @@ module CommuteActivity {
 		function saveActivity() {
 			if( hasActiveActivity ) {
 				// Remove the activity view
-	            Ui.popView(Ui.SLIDE_RIGHT);
+				Ui.popView(Ui.SLIDE_IMMEDIATE);
+	            Ui.popView(Ui.SLIDE_IMMEDIATE);
 			
 				activityModel.pauseActivity(); // Stop the timer and position updates
 	    		CommuteHistory.saveCommute(activityModel);
             
 	            // Show the activity summary
-	            var summaryView = new CommuteSummaryView(activityModel);
-		        Ui.pushView(summaryView, new CommuteSummaryDelegate(), Ui.SLIDE_LEFT);
+	            summaryView = new CommuteSummaryView(activityModel);
+		        Ui.pushView(summaryView, new CommuteSummaryDelegate(summaryView), Ui.SLIDE_LEFT);
 	        }
 		}
 		
 		function discardActivity() {
 			if( hasActiveActivity ) {
 				// Remove the activity view without saving any data
-				Ui.popView(Ui.SLIDE_RIGHT);
+				Ui.popView(Ui.SLIDE_IMMEDIATE);
 			}
 		
 			activityModel = null;
 			activityView = null;
 			hasActiveActivity = false;
+		}
+		
+		function getSummaryView() {
+			return summaryView;
 		}
 		
 	}
@@ -82,11 +87,11 @@ module CommuteActivity {
 		hidden var commuteStartTime = null; // Moment object
 		hidden var numStops = null; // Integer
 		hidden var maxSpeed = null; // In meters per second
+		hidden var currentSpeed = null; // In meters per second
 		
 		hidden var timer = null; // Timer object
 		hidden var isMoving = false;
 		hidden var isValidGPS = false;
-		hidden var lastGPSFixTime = null; // Moment object
 
 		
 		
@@ -97,6 +102,7 @@ module CommuteActivity {
 			commuteStartTime = Time.now();
 			numStops = 0;
 			maxSpeed = 0;
+			currentSpeed = 0;
 			timer = new Timer.Timer();
 		}
 		
@@ -113,6 +119,10 @@ module CommuteActivity {
 		///! This function runs once every 1 second. It updates the stopped and moving times
 		function updateActivity() {
 			if( isValidGPS ) {
+				
+				// Update the total distance travelled by integrating the speed over time
+				totalDistance += currentSpeed * UPDATE_PERIOD_SEC;
+				
 				if( isMoving ) {
 					timeMoving += UPDATE_PERIOD_SEC; 
 				} else {
@@ -127,7 +137,9 @@ module CommuteActivity {
 			if( info.accuracy != Position.QUALITY_NOT_AVAILABLE ) {
 				isValidGPS = true;
 				
-				if( info.speed > MIN_MOVING_SPEED ) {
+				currentSpeed = info.speed;
+				
+				if( currentSpeed > MIN_MOVING_SPEED ) {
 					isMoving = true;
 					
 					// Check if we have acheived a new maximum speed
@@ -142,15 +154,6 @@ module CommuteActivity {
 					}
 					isMoving = false;
 				}
-				
-				// Update the total distance travelled by integrating the speed over time
-				if( null != lastGPSFixTime ) {
-				    // deltaTime is in seconds, speed is in meters / second
-					var deltaTime = info.when.subtract(lastGPSFixTime).value();
-					totalDistance += info.speed * deltaTime;
-				}
-				
-				lastGPSFixTime = info.when;
 				
 			} else {
 				// Don't update the state because the GPS fix is not good enough
@@ -247,7 +250,9 @@ module CommuteActivity {
 		        
 		        // Display the total time
 		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2) + 5, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
-		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_HOT, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+		        
+		        
 		        
 		        // Draw the dividing bars
 				dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
@@ -256,7 +261,7 @@ module CommuteActivity {
 
 		        
 		        // Draw a bar along the bottom to represent commute efficiency
-		        var efficiency = commuteModel.getCommuteEfficiency();
+				var efficiency = commuteModel.getCommuteEfficiency();
 		        var barColor = Gfx.COLOR_WHITE;
 		        var barWidth = dc.getWidth() * efficiency / 100.0;
 		        if( efficiency < 25 ) {
@@ -314,99 +319,6 @@ module CommuteActivity {
 	}
 	
 	
-	hidden class CommuteSummaryView extends Ui.View {
-		
-		hidden var commuteModel = null;
-
-
-		function initialize(activityModel) {
-			commuteModel = activityModel;
-		}
-		
-	    function onLayout(dc) {
-	    
-	    	dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-	        
-	    	
-	    	var startTimeInfo = Gregorian.info(commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT);
-	    	var startTimeString = CommuteTrackerUtil.formatTime(startTimeInfo.hour, startTimeInfo.min);
-			
-			var currentYPosn = 2;
-			
-			// Draw the title with the current time
-			dc.drawText(( dc.getWidth()/2), currentYPosn, Gfx.FONT_SMALL, "Commute Summary " + startTimeString, Gfx.TEXT_JUSTIFY_CENTER );
-			
-			
-			// Draw a green horizontal line
-			currentYPosn = 20;
-			dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT );
-			dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
-
-			// Parameters for drawing the data fields
-			var labelXPosn = dc.getWidth() / 8;
-			var valueXPosn = 7 * dc.getWidth() / 8;
-			var verticalSpacing = 15;
-
-			// Display the total time
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTotalCommuteTime()), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the time moving
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Moving", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeMoving()), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the time stoped
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Stopped", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeStopped()), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the distance travelled
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Distance", Gfx.TEXT_JUSTIFY_LEFT);
-			var dist = commuteModel.getTotalDistance() * CommuteTrackerUtil.METERS_TO_MILES;
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, dist.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the max speed
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
-			var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speed.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the number of stops
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Stops", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, commuteModel.getNumStops().toString(), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Display the commute efficiency
-			currentYPosn += verticalSpacing;
-			dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
-			dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, commuteModel.getCommuteEfficiency().toString(), Gfx.TEXT_JUSTIFY_RIGHT);
-			
-	    	
-	    }
 	
-		
-		
-		function onUpdate(dc) {
-		    
-	      }
-	}
-	
-	
-	hidden class CommuteSummaryDelegate extends Ui.InputDelegate {
-	
-		function onKey(keyEvent) {
-			var key = keyEvent.getKey();
-			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
-				// Take them back to the main menu
-				Ui.popView(Ui.SLIDE_RIGHT);
-			} 
-		}
-	}
 	
 }

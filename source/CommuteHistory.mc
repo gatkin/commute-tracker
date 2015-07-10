@@ -10,7 +10,7 @@ using CommuteTrackerUtil as CommuteTrackerUtil;
 module CommuteHistory {
 
 	//!  We group commutes that start in blocks of HISTORY_RESOLUTION minutes to store in history
-	hidden const HISTORY_RESOLUTION = 10; // In minutes
+	const HISTORY_RESOLUTION = 5; // In minutes
 	hidden const NUM_RECORDS_KEY_EXTN = "_NUM_RECORDS";
 	hidden const MOVE_TIME_KEY_EXTN = "_MOVE_TIME"; 
 	hidden const STOP_TIME_KEY_EXTN = "_STOP_TIME"; 
@@ -21,14 +21,14 @@ module CommuteHistory {
 	
 	class CommuteHistoryController extends Ui.BehaviorDelegate {
 		
-		hidden var historyView = null;
+		hidden var historyChartView = null;
 		
 		function initialize() {
-			historyView = new CommuteHistoryView();
+			historyChartView = new CommuteHistoryChartView();
 		}
 		
 		function getView() {
-			return historyView;
+			return historyChartView;
 		}
 		
 		function onBack() {
@@ -39,9 +39,9 @@ module CommuteHistory {
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
 			if( Ui.KEY_DOWN == key ) {
-				historyView.showNextHistoryPage();
+				historyChartView.showNextHistoryPage();
 			} else if ( Ui.KEY_UP == key ) {
-				historyView.showPreviousHistoryPage();
+				historyChartView.showPreviousHistoryPage();
 			} else if ( Ui.KEY_ESC == key ) {
 				Ui.popView(Ui.SLIDE_RIGHT);
 			} else if ( Ui.KEY_ENTER ) {
@@ -50,239 +50,14 @@ module CommuteHistory {
 		}
 		
 		function showHistoryDetail() {
-			var histDetailView = new CommuteHistoryDetailView( historyView.getTimeToShow() );
+			var histDetailView = new CommuteHistoryDetailView( historyChartView.getTimeToShow() );
 			var histDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );
 			Ui.pushView( histDetailView, histDetailDelegate, Ui.SLIDE_LEFT );
 		}
 	}
 	
 	
-	hidden class CommuteHistoryView extends Ui.View {
-		hidden var timeToShow = null; // For what time of day we display for the commute history
-		
-		function initialize() {
-			timeToShow = Time.now();
-		}
 	
-	    function onLayout(dc) {
-	        setLayout(Rez.Layouts.CommuteHistory(dc));
-	    }
-	
-	    //! Update the view
-	    function onUpdate(dc) {
-	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-	        
-	        var spacing = 100 / (60 / HISTORY_RESOLUTION);
-	        var textY = 30;
-	        var textX = 5;
-	        var barHeight = 5;
-	        var chartBaseX = 45;
-	        var maxBarWidth = 150;
-	        var barWidth = 0;
-	        
-	        var commuteHistory = loadCommuteHistoryOverview(timeToShow);
-	        for(var i=0; i<commuteHistory.size(); i++) {
-	        	// Draw the time label
-	    		dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-	    		dc.drawText(textX, textY, Gfx.FONT_XTINY, commuteHistory[i][:timeLabel], Gfx.TEXT_JUSTIFY_LEFT);
-	    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth / 100.0;
-	    		
-	    		// If we have a record for this time, always show a tiny bar, even if the 
-				// efficiency is zero to indicate that a record exists
-				if( commuteHistory[i][:hasRecord] && 0 == commuteHistory[i][:commuteEfficiency] ) {
-					barWidth = 2;
-				} 
-				
-				// Choose the color for the bar based on the efficiency
-				var barColor = Gfx.COLOR_WHITE;
-				if( commuteHistory[i][:commuteEfficiency] < 25 ) {
-					barColor = Gfx.COLOR_RED;
-				} else if ( commuteHistory[i][:commuteEfficiency] < 50 ) {
-					barColor = Gfx.COLOR_ORANGE;
-				} else if ( commuteHistory[i][:commuteEfficiency] < 75 ) {
-					barColor = Gfx.COLOR_YELLOW;
-				} else {
-					barColor = Gfx.COLOR_GREEN;
-				}
-				
-				dc.setColor(barColor, Gfx.COLOR_TRANSPARENT);
-	    		dc.fillRectangle(chartBaseX, textY + 8, barWidth, barHeight);
-	    		textY += spacing;
-	    	}
-	    	
-	    	// Draw the graph tickmarks
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-			dc.fillRectangle(chartBaseX-1, 30 , 1, textY - 28);
-			dc.fillRectangle(chartBaseX-1, textY, maxBarWidth, 1);
-			dc.drawText(chartBaseX, textY + 2, Gfx.FONT_XTINY, "0", Gfx.TEXT_JUSTIFY_RIGHT);
-			dc.drawText(chartBaseX + maxBarWidth/2, textY + 2, Gfx.FONT_XTINY, "50", Gfx.TEXT_JUSTIFY_RIGHT);
-			dc.drawText(chartBaseX + maxBarWidth, textY + 2, Gfx.FONT_XTINY, "100", Gfx.TEXT_JUSTIFY_RIGHT);
-			
-			// Title
-			dc.drawText(115, 3, Gfx.FONT_SMALL, "Commute Efficiency", Gfx.TEXT_JUSTIFY_CENTER); 
-	    }
-	
-	
-		function showPreviousHistoryPage() {
-			// Decrease the time to show by one half hour
-			var durationDecrement = new Time.Duration(-1800);
-			timeToShow = timeToShow.add(durationDecrement);
-			Ui.requestUpdate();
-		}
-		
-		function showNextHistoryPage() {
-			// Increase the time to show by one half hour
-			var durationIncrement = new Time.Duration(1800);
-			timeToShow = timeToShow.add(durationIncrement);
-			Ui.requestUpdate();
-		}
-		
-		function getTimeToShow() {
-			return timeToShow;
-		}
-	}
-	
-	
-	class CommuteHistoryDetailView extends Ui.View {
-	
-		hidden var commuteStartTime = null; // Moment object
-
-		function initialize( startTime ) {
-			commuteStartTime = startTime;
-		}
-		
-		function onUpdate(dc) {
-	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-	        
-	        var historyData = loadCommuteHistoryDetail( commuteStartTime );
-	        
-	        var startTimeString = CommuteTrackerUtil.formatTime(historyData[:startTimeHour], historyData[:startTimeMinute]);
-			
-			var currentYPosn = 2;
-			
-			// Draw the title with the current time
-			dc.drawText(( dc.getWidth()/2), currentYPosn, Gfx.FONT_SMALL, "Commute History " + startTimeString, Gfx.TEXT_JUSTIFY_CENTER );
-			
-			
-			// Draw a green horizontal line
-			currentYPosn = 20;
-			dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT );
-			dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
-
-			// Display history data, if we have it for this time of day
-			if( historyData[:numRecords] > 0 ) {
-				// Parameters for drawing the data fields
-				var labelXPosn = dc.getWidth() / 8;
-				var valueXPosn = 7 * dc.getWidth() / 8;
-				var verticalSpacing = 15;
-	
-				// Display the average total time
-				currentYPosn += 5;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Records", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, historyData[:numRecords].toString(), Gfx.TEXT_JUSTIFY_RIGHT);
-	
-				// Display the average total time
-				var totalTime = historyData[:stopTime]  + historyData[:moveTime];
-				var avgTime = totalTime / historyData[:numRecords];
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgTime), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the average time moving
-				var avgMoveTime = historyData[:moveTime] / historyData[:numRecords];
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time Moving", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgMoveTime), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the average time stoped
-				var avgStopTime = historyData[:stopTime] / historyData[:numRecords];
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Time Stopped", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(avgStopTime), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the avg distance travelled
-				var avgDistance = historyData[:distance] / historyData[:numRecords] * CommuteTrackerUtil.METERS_TO_MILES;
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Distance", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgDistance.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the max speed
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
-				var speed = historyData[:maxSpeed]  * CommuteTrackerUtil.MPS_TO_MPH;
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speed.format("%.2f"), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the number of stops
-				var avgNumStops = historyData[:numStops] / historyData[:numRecords];
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Avg Stops", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, avgNumStops.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-				// Display the commute efficiency
-				var efficiency = 0;
-				// Check for divide by zero
-				if( 0 != totalTime ) {
-					efficiency = historyData[:moveTime] * 100 / totalTime;
-				}
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, efficiency.toString(), Gfx.TEXT_JUSTIFY_RIGHT);
-				
-			} else {
-				// Display that there is no data
-				dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "No Data", Gfx.TEXT_JUSTIFY_CENTER);
-			}
-	        
-	     }
-		
-		
-		function showPreviousHistoryDetail() {
-			// Decrease the time to show by one half hour
-			var durationIncrement = new Time.Duration( -HISTORY_RESOLUTION * 60 );
-			commuteStartTime = commuteStartTime.add( durationIncrement );
-			Ui.requestUpdate();
-		}
-		
-		function showNextHistoryDetail() {
-			// Decrease the time to show by one half hour
-			var durationIncrement = new Time.Duration( HISTORY_RESOLUTION * 60 );
-			commuteStartTime = commuteStartTime.add( durationIncrement );
-			Ui.requestUpdate();
-		}
-	
-	}
-	
-	
-	
-	class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
-		
-		hidden var historyDetailView = null;
-		
-		function initialize( histDetailView ) {
-			historyDetailView = histDetailView;
-		}
-		
-		function onBack() {
-			Ui.popView(Ui.SLIDE_RIGHT);
-			return true;
-		}
-		
-		function onKey(keyEvent) {
-			var key = keyEvent.getKey();
-			if( Ui.KEY_DOWN == key ) {
-				historyDetailView.showNextHistoryDetail();
-			} else if ( Ui.KEY_UP == key ) {
-				historyDetailView.showPreviousHistoryDetail();
-			} else if ( Ui.KEY_ESC == key ) {
-				Ui.popView(Ui.SLIDE_RIGHT);
-			} 
-		}
-	}
 	
 	function saveCommute( commuteModel ) {
 		// We will aggregate commute statistics based on time of day at HISTORY_RESOLUTION minute intervals.
@@ -326,7 +101,7 @@ module CommuteHistory {
 	}
 	
 	
-	hidden function loadCommuteHistoryDetail( commuteStartTime ) {
+	function loadCommuteHistoryDetail( commuteStartTime ) {
 		var keyInfo = getKeyForMoment( commuteStartTime );
 		var objectStoreKey = keyInfo[:objectStoreKey];
 		
@@ -363,15 +138,14 @@ module CommuteHistory {
 	}
 	
 	
-	hidden function loadCommuteHistoryOverview( commuteStartTime ) {
+	function loadCommuteHistoryOverview( commuteStartTime, numRecordsToLoad ) {
 		var keyInfo = getKeyForMoment( commuteStartTime );
 		var minute = keyInfo[:minute];
 		var hour = keyInfo[:hour];
 		
 		var app = App.getApp();
-		var recordsPerHour = 60 / HISTORY_RESOLUTION;
-		var commuteHistory = new [recordsPerHour];
-		for(var i=0; i<recordsPerHour; i++) {
+		var commuteHistory = new [numRecordsToLoad];
+		for(var i=0; i<numRecordsToLoad; i++) {
 		
 			// Retrive the values from the object store
 			var objectStoreKey = getKeyForHourMinute(hour, minute);
