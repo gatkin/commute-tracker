@@ -37,9 +37,17 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
 
 class MainView extends Ui.View {
 
-    function onLayout(dc) {
-        Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
+	hidden var hasShownMenu = false;
+    
+    function onShow() {
+    	if( !hasShownMenu ) {
+			Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
+			hasShownMenu = true;
+		} else {
+			Ui.popView(Ui.SLIDE_IMMEDIATE);
+		} 
     }
+    
 }
 
 class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
