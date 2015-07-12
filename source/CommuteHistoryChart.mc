@@ -6,6 +6,9 @@ using Toybox.Graphics as Gfx;
 using CommuteTrackerUtil as CommuteTrackerUtil;
 
 class CommuteHistoryChartView extends Ui.View {
+
+		hidden const TIMES_PER_PAGE = 6; // Show data for 6 commute times per page
+		hidden const PAGE_TIME_STEP = 1800; // Each page has 30 minutes of commute times
 		hidden var timeToShow = null; // For what time of day we display for the commute history
 		
 		function initialize() {
@@ -25,11 +28,11 @@ class CommuteHistoryChartView extends Ui.View {
 	        var textY = 25;
 	        var textX = 5;
 	        var barHeight = 5;
-	        var chartBaseX = 45;
+	        var chartBaseX = 50;
 	        var maxBarWidth = 150;
 	        var barWidth = 0;
 	        
-	        var commuteHistory = CommuteHistory.loadCommuteHistoryOverview(timeToShow, 6);
+	        var commuteHistory = CommuteHistory.loadCommuteHistoryOverview(timeToShow, TIMES_PER_PAGE);
 	        for(var i=0; i<commuteHistory.size(); i++) {
 	        	// Draw the time label
 	    		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT );
@@ -75,14 +78,14 @@ class CommuteHistoryChartView extends Ui.View {
 	
 		function showPreviousHistoryPage() {
 			// Decrease the time to show by one half hour
-			var durationDecrement = new Time.Duration(-1800);
+			var durationDecrement = new Time.Duration(-PAGE_TIME_STEP);
 			timeToShow = timeToShow.add(durationDecrement);
 			Ui.requestUpdate();
 		}
 		
 		function showNextHistoryPage() {
 			// Increase the time to show by one half hour
-			var durationIncrement = new Time.Duration(1800);
+			var durationIncrement = new Time.Duration(PAGE_TIME_STEP);
 			timeToShow = timeToShow.add(durationIncrement);
 			Ui.requestUpdate();
 		}

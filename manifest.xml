@@ -10,7 +10,6 @@
 
         <iq:permissions>
         	<iq:uses-permission id="Positioning"/>
-            <iq:uses-permission id="Fit"/>
         </iq:permissions>
 
         <iq:languages/>

@@ -65,6 +65,7 @@ module CommuteActivity {
 			if( hasActiveActivity ) {
 				// Remove the activity view without saving any data
 				Ui.popView(Ui.SLIDE_IMMEDIATE);
+				activityModel.pauseActivity(); // Stop the timer and position updates
 			}
 		
 			activityModel = null;
@@ -129,6 +130,7 @@ module CommuteActivity {
 					timeStopped += UPDATE_PERIOD_SEC;
 				}
 			}
+			
 			Ui.requestUpdate(); // Update the timer displayed on the screen
 		}
 		

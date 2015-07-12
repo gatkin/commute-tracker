@@ -2,12 +2,6 @@
     <string id="AppName">CommuteTracker</string>
 
     <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
-    <bitmap id="id_monkey" filename="images/monkey.png" />
-    
-    <layout id="MainLayout">
-	    <label x="center" y="5" text="Click the menu button" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" />
-	    <bitmap id="id_monkey" x="center" y="30" filename="images/monkey.png" />
-	</layout>
     
     
 </resources>

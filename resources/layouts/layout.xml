@@ -1,3 +1,0 @@
-<layout id="ActivityLayout">
-	<label x="center" y="5" text="Recording" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" />
-</layout>

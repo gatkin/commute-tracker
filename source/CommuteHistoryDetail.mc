@@ -45,7 +45,7 @@ class CommuteHistoryDetailView extends Ui.View {
 	
 				// Display the average total time
 				currentYPosn += 5;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Records", Gfx.TEXT_JUSTIFY_LEFT);
+				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Commutes", Gfx.TEXT_JUSTIFY_LEFT);
 				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, historyData[:numRecords].toString(), Gfx.TEXT_JUSTIFY_RIGHT);
 	
 				// Display the average total time
@@ -78,7 +78,7 @@ class CommuteHistoryDetailView extends Ui.View {
 				currentYPosn += verticalSpacing;
 				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
 				var speed = historyData[:maxSpeed]  * CommuteTrackerUtil.MPS_TO_MPH;
-				var speedString = speed.format("%.2f") + " mph";
+				var speedString = speed.format("%.1f") + " mph";
 				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speedString, Gfx.TEXT_JUSTIFY_RIGHT);
 				
 				// Display the number of stops
@@ -106,14 +106,14 @@ class CommuteHistoryDetailView extends Ui.View {
 		
 		
 		function showPreviousHistoryDetail() {
-			// Decrease the time to show by one half hour
+			// Decrease the time to show by one HISTORY_RESOLUTION seconds
 			var durationIncrement = new Time.Duration( -CommuteHistory.HISTORY_RESOLUTION * 60 );
 			commuteStartTime = commuteStartTime.add( durationIncrement );
 			Ui.requestUpdate();
 		}
 		
 		function showNextHistoryDetail() {
-			// Decrease the time to show by one half hour
+			// Increase the time to show by one HISTORY_RESOLUTION seconds
 			var durationIncrement = new Time.Duration( CommuteHistory.HISTORY_RESOLUTION * 60 );
 			commuteStartTime = commuteStartTime.add( durationIncrement );
 			Ui.requestUpdate();
