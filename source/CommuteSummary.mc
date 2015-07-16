@@ -126,4 +126,13 @@ class CommuteSummaryDelegate extends Ui.InputDelegate {
 				summaryView.previousPage();
 			}
 		}
+		
+		function onSwipe(swipeEvent) {
+			var direction = swipeEvent.getDirection();
+			if( Ui.SWIPE_LEFT == direction ) {
+				summaryView.nextPage();
+			} else if( Ui.SWIPE_RIGHT == direction ) {
+				summaryView.previousPage();
+			}
+		}
 	}

@@ -49,6 +49,15 @@ module CommuteHistory {
 			}
 		}
 		
+		function onSwipe(swipeEvent) {
+			var direction = swipeEvent.getDirection();
+			if( Ui.SWIPE_LEFT == direction ) {
+				historyChartView.showNextHistoryPage();
+			} else if( Ui.SWIPE_RIGHT == direction ) {
+				historyChartView.showPreviousHistoryPage();
+			}
+		}
+		
 		function showHistoryDetail() {
 			var histDetailView = new CommuteHistoryDetailView( historyChartView.getTimeToShow() );
 			var histDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );

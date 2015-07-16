@@ -146,4 +146,13 @@ class CommuteHistoryDetailView extends Ui.View {
 				Ui.popView(Ui.SLIDE_RIGHT);
 			} 
 		}
+		
+		function onSwipe(swipeEvent) {
+			var direction = swipeEvent.getDirection();
+			if( Ui.SWIPE_LEFT == direction ) {
+				historyDetailView.showNextHistoryDetail();
+			} else if( Ui.SWIPE_RIGHT == direction ) {
+				historyDetailView.showPreviousHistoryDetail();
+			}
+		}
 	}
