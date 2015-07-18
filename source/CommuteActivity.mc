@@ -89,8 +89,6 @@ module CommuteActivity {
 		hidden var timer = null; // Timer object
 		hidden var isMoving = false;
 		hidden var isValidGPS = false;
-
-		
 		
 		function initialize() {
 			totalDistance = 0.0;
@@ -300,9 +298,9 @@ module CommuteActivity {
 	        if (item == :resume) {
 	        	// Do nothing, return to the activity
 	        } else if (item == :save) {
-	            getCommuteActivityController().saveActivity();
+	            getController().saveActivity();
 	        } else if ( item == :discard ) {
-				getCommuteActivityController().discardActivity();
+				getController().discardActivity();
 	        }
 	    }
 	}

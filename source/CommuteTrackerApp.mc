@@ -19,23 +19,10 @@ class CommuteTrackerApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        return [ new MainView(), new CommuteTrackerDelegate() ];
+        return [ new MainView(), new MainViewDelegate() ];
     }
 }
 
-
-class MainMenuDelegate extends Ui.MenuInputDelegate {
-	
-    function onMenuItem(item) {
-        if (item == :start) {
-    		var activityController = CommuteActivity.getController();
-    		activityController.startCommuteActivity();
-        } else if (item == :history) {
-            var historyController = CommuteHistory.getController();
-			historyController.showHistoryChart( Time.now() );
-        }
-    }
-}
 
 class MainView extends Ui.View {
 	
@@ -43,29 +30,35 @@ class MainView extends Ui.View {
         setLayout(Rez.Layouts.MainLayout(dc));
     }
 	
-	
     function onUpdate(dc) {
 		// Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
     }
-    
-    
-    
 }
 
-class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
+class MainViewDelegate extends Ui.BehaviorDelegate {
 
     function onKey(keyEvent) {
 		var key = keyEvent.getKey();
 		if(  Ui.KEY_ESC == key ) {
+			// Let them leave the App
 			Ui.popView( Ui.SLIDE_RIGHT );
 		} else {
+			// If they press any other key, take them to the main menu of the app
 			Ui.pushView( new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP );
 		}
 	}
 }
 
-
-
-
-
+class MainMenuDelegate extends Ui.MenuInputDelegate {
+	
+    function onMenuItem(item) {
+        if ( :start == item ) {
+    		var activityController = CommuteActivity.getController();
+    		activityController.startCommuteActivity();
+        } else if ( :history == item ) {
+            var historyController = CommuteHistory.getController();
+			historyController.showHistoryChart( Time.now() );
+        }
+    }
+}

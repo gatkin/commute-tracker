@@ -14,80 +14,48 @@ class CommuteSummaryView extends Ui.View {
 			currentPage = :pageOne;
 		}
 		
-	    function onLayout(dc) {
-	    }
+	    function onLayout(dc) { }
 	
 		
 		
 		function onUpdate(dc) {
-		    dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
-	        
-	    	
 	    	var startTimeInfo = Gregorian.info(commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT);
-	    	var startTimeString = CommuteTrackerUtil.formatTime(startTimeInfo.hour, startTimeInfo.min);
-			
-			var currentYPosn = 2;
-			
-			// Draw the title with the current time
-			dc.drawText(( dc.getWidth()/2), currentYPosn, Gfx.FONT_LARGE, "Commute " + startTimeString, Gfx.TEXT_JUSTIFY_CENTER );
-			
-			
-			// Draw a horizontal line
-			currentYPosn = 30;
-			dc.setColor( Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT );
-			dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
-
-			// Parameters for drawing the data fields
-			var labelXPosn = dc.getWidth() / 8;
-			var valueXPosn = 7 * dc.getWidth() / 8;
-			var verticalSpacing = 25;
 
 			if( currentPage == :pageOne ) {
-	
-				// Display the total time
-				currentYPosn += 15;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTotalCommuteTime()), Gfx.TEXT_JUSTIFY_RIGHT);
+				setLayout(Rez.Layouts.CommuteSummaryPageOneLayout(dc));
+			
+				var timeMovingString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeMoving() );
+				View.findDrawableById("move_time").setText( timeMovingString );
 				
-				// Display the time moving
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Moving", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeMoving()), Gfx.TEXT_JUSTIFY_RIGHT);
+				var timeStoppedString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeStopped() );
+				View.findDrawableById("stop_time").setText( timeStoppedString );
 				
-				// Display the time stoped
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Time Stopped", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, CommuteTrackerUtil.formatDuration(commuteModel.getTimeStopped()), Gfx.TEXT_JUSTIFY_RIGHT);
+		    	
+		    	var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
+		        View.findDrawableById("total_commute_time").setText( totalTimeString );
 				
-				// Display the distance travelled
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Distance", Gfx.TEXT_JUSTIFY_LEFT);
 				var dist = commuteModel.getTotalDistance() * CommuteTrackerUtil.METERS_TO_MILES;
-				var distString = dist.format("%.2f") +  " mi";
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, distString, Gfx.TEXT_JUSTIFY_RIGHT);
+				var distString = dist.format("%.1f") +  " mi";
+				View.findDrawableById("distance").setText( distString );
 			
 			} else { // page 2
+				setLayout(Rez.Layouts.CommuteSummaryPageTwoLayout(dc));
 				
-				// Display the max speed
-				currentYPosn += 15;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Max Speed", Gfx.TEXT_JUSTIFY_LEFT);
 				var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
-				var speedString = speed.format("%.2f") + " mph";
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, speedString, Gfx.TEXT_JUSTIFY_RIGHT);
+				var speedString = speed.format("%.1f") + " mph";
+				View.findDrawableById("max_speed").setText( speedString );
 				
-				// Display the number of stops
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Stops", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, commuteModel.getNumStops().toString(), Gfx.TEXT_JUSTIFY_RIGHT);
+				View.findDrawableById("num_stops").setText( commuteModel.getNumStops().toString() );
 				
-				// Display the commute efficiency
-				currentYPosn += verticalSpacing;
-				dc.drawText(labelXPosn, currentYPosn, Gfx.FONT_SMALL, "Efficiency", Gfx.TEXT_JUSTIFY_LEFT);
-				dc.drawText(valueXPosn, currentYPosn, Gfx.FONT_SMALL, commuteModel.getCommuteEfficiency().toString(), Gfx.TEXT_JUSTIFY_RIGHT);
+				View.findDrawableById("efficiency").setText( commuteModel.getCommuteEfficiency().toString() );
 			}
+			
+			// Draw the title with the current time
+			var startTimeString = CommuteTrackerUtil.formatTime(startTimeInfo.hour, startTimeInfo.min);
+			View.findDrawableById("commute_start_time").setText( "Commute " + startTimeString );
+			
+			// Call the parent onUpdate function to redraw the layout
+			View.onUpdate(dc);
 	     }
 	     
 	     function nextPage() {
