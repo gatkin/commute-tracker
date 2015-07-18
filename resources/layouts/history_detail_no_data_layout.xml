@@ -1,0 +1,14 @@
+<resources>
+    <layouts>
+		<layout id="HistoryDetailNoDataLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the heading with a blue bar underneath -->
+			<label id="commute_start_time" x="center" y="2" text="Commute History" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL"/>
+			<drawable id="blue_bar" />
+			
+			<label x="center" y="center" text="No Data" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_LARGE"/>
+			
+		</layout>
+	</layouts>
+</resources>
