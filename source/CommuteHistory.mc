@@ -18,48 +18,21 @@ module CommuteHistory {
 	hidden const NUM_STOPS_KEY_EXTN = "_NUM_STOPS";
 	hidden const MAX_SPEED_KEY_EXTN = "_MAX_SPEED";
 	
+	function getController() {
+		return new CommuteHistoryController();
+	}
 	
-	class CommuteHistoryController extends Ui.BehaviorDelegate {
+	
+	hidden class CommuteHistoryController {
 		
-		hidden var historyChartView = null;
-		
-		function initialize() {
-			historyChartView = new CommuteHistoryChartView();
+		function showHistoryChart( timeToShow ) {
+			var historyChartView = new CommuteHistoryChartView( timeToShow );
+			var historyChartDelegate = new CommuteHistoryChartDelegate( historyChartView );
+			Ui.pushView( historyChartView, historyChartDelegate, Ui.SLIDE_LEFT );
 		}
 		
-		function getView() {
-			return historyChartView;
-		}
-		
-		function onBack() {
-			Ui.popView(Ui.SLIDE_RIGHT);
-			return true;
-		}
-		
-		function onKey(keyEvent) {
-			var key = keyEvent.getKey();
-			if( Ui.KEY_DOWN == key ) {
-				historyChartView.showNextHistoryPage();
-			} else if ( Ui.KEY_UP == key ) {
-				historyChartView.showPreviousHistoryPage();
-			} else if ( Ui.KEY_ESC == key ) {
-				Ui.popView(Ui.SLIDE_RIGHT);
-			} else if ( Ui.KEY_ENTER ) {
-				showHistoryDetail();
-			}
-		}
-		
-		function onSwipe(swipeEvent) {
-			var direction = swipeEvent.getDirection();
-			if( Ui.SWIPE_LEFT == direction ) {
-				historyChartView.showNextHistoryPage();
-			} else if( Ui.SWIPE_RIGHT == direction ) {
-				historyChartView.showPreviousHistoryPage();
-			}
-		}
-		
-		function showHistoryDetail() {
-			var histDetailView = new CommuteHistoryDetailView( historyChartView.getTimeToShow() );
+		function showHistoryDetail( timeToShow ) {
+			var histDetailView = new CommuteHistoryDetailView( timeToShow );
 			var histDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );
 			Ui.pushView( histDetailView, histDetailDelegate, Ui.SLIDE_LEFT );
 		}
@@ -190,7 +163,7 @@ module CommuteHistory {
 	///! Returns the hour, minute, and objectStoreKey for the given moment
     ///! to be used to save and access data in the object store
 	hidden function getKeyForMoment(timeMoment) {
-		var timeInfo = Gregorian.info(timeMoment, Time.FORMAT_SHORT);
+		var timeInfo = Gregorian.info( timeMoment, Time.FORMAT_SHORT );
 		// Find the closest HISTORY_RESOLUTION minute to the current time
 		var minute = ((timeInfo.min + (HISTORY_RESOLUTION/2)) / HISTORY_RESOLUTION ) * HISTORY_RESOLUTION ; 
 		var hour = timeInfo.hour;

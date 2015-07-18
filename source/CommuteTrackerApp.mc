@@ -1,6 +1,8 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using Toybox.Time as Time;
+using Toybox.Graphics as Gfx;
 using CommuteHistory as CommuteHistory;
 using CommuteActivity as CommuteActivity;
 
@@ -27,26 +29,27 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
     function onMenuItem(item) {
         if (item == :start) {
     		var activityContoller = CommuteActivity.getCommuteActivityController();
-    		Ui.pushView(activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT);
+    		Ui.pushView( activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT );
         } else if (item == :history) {
-            var historyController = new CommuteHistory.CommuteHistoryController();
-			Ui.pushView(historyController.getView(), historyController, Ui.SLIDE_LEFT);
+            var historyController = CommuteHistory.getController();
+			historyController.showHistoryChart( Time.now() );
         }
     }
 }
 
 class MainView extends Ui.View {
-
-	hidden var hasShownMenu = false;
-    
-    function onShow() {
-    	if( !hasShownMenu ) {
-			Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
-			hasShownMenu = true;
-		} else {
-			Ui.popView(Ui.SLIDE_IMMEDIATE);
-		} 
+	
+	function onLayout(dc) {
+        setLayout(Rez.Layouts.MainLayout(dc));
     }
+	
+	
+    function onUpdate(dc) {
+		// Call the parent onUpdate function to redraw the layout
+        View.onUpdate(dc);
+    }
+    
+    
     
 }
 
@@ -54,9 +57,11 @@ class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
 
     function onKey(keyEvent) {
 		var key = keyEvent.getKey();
-		if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
-			Ui.popView(Ui.SLIDE_RIGHT);
-		} 
+		if(  Ui.KEY_ESC == key ) {
+			Ui.popView( Ui.SLIDE_RIGHT );
+		} else {
+			Ui.pushView( new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP );
+		}
 	}
 }
 

@@ -4,6 +4,7 @@ using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
 using Toybox.Graphics as Gfx;
 using CommuteTrackerUtil as CommuteTrackerUtil;
+using CommuteHistory as CommuteHistory;
 
 class CommuteHistoryChartView extends Ui.View {
 
@@ -11,8 +12,8 @@ class CommuteHistoryChartView extends Ui.View {
 		hidden const PAGE_TIME_STEP = 1800; // Each page has 30 minutes of commute times
 		hidden var timeToShow = null; // For what time of day we display for the commute history
 		
-		function initialize() {
-			timeToShow = Time.now();
+		function initialize( time ) {
+			timeToShow = time;
 		}
 	
 	    function onLayout(dc) {
@@ -92,5 +93,45 @@ class CommuteHistoryChartView extends Ui.View {
 		
 		function getTimeToShow() {
 			return timeToShow;
+		}
+	}
+	
+	hidden class CommuteHistoryChartDelegate extends Ui.BehaviorDelegate {
+		
+		hidden var historyChartView = null;
+		
+		function initialize( view ) {
+			historyChartView = view;
+		}
+		
+		function onBack() {
+			// Remove the current view and take them back to the main menu
+			Sys.println("back");
+			Ui.popView( Ui.SLIDE_UP );
+			return true;
+		}
+		
+		function onKey(keyEvent) {
+			var key = keyEvent.getKey();
+			if( Ui.KEY_DOWN == key ) {
+				historyChartView.showNextHistoryPage();
+			} else if ( Ui.KEY_UP == key ) {
+				historyChartView.showPreviousHistoryPage();
+			} else if ( Ui.KEY_ESC == key ) {
+				onBack();
+			} else if ( Ui.KEY_ENTER ) {
+				// Remove the current history chart view to show the history detail view
+				Ui.popView( Ui.SLIDE_LEFT );
+				CommuteHistory.getController().showHistoryDetail( historyChartView.getTimeToShow() );
+			}
+		}
+		
+		function onSwipe(swipeEvent) {
+			var direction = swipeEvent.getDirection();
+			if( Ui.SWIPE_LEFT == direction ) {
+				historyChartView.showNextHistoryPage();
+			} else if( Ui.SWIPE_RIGHT == direction ) {
+				historyChartView.showPreviousHistoryPage();
+			}
 		}
 	}

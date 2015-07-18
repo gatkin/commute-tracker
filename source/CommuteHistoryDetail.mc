@@ -15,10 +15,12 @@ class CommuteHistoryDetailView extends Ui.View {
 			commuteStartTime = startTime;
 		}
 		
+		function onLayout(dc) {
+        	setLayout(Rez.Layouts.HistoryDetailLayout(dc));
+    	}
+		
 		function onUpdate(dc) {
-	        dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
+        	
 	        
 	        var historyData = CommuteHistory.loadCommuteHistoryDetail( commuteStartTime );
 	        
@@ -27,14 +29,14 @@ class CommuteHistoryDetailView extends Ui.View {
 			var currentYPosn = 2;
 			
 			// Draw the title with the current time
-			dc.drawText(( dc.getWidth()/2), currentYPosn, Gfx.FONT_SMALL, "Commute History " + startTimeString, Gfx.TEXT_JUSTIFY_CENTER );
+			var startTime = View.findDrawableById("detail_start_time").setText( "Commute History " + startTimeString );
 			
 			
 			// Draw a horizontal line
-			currentYPosn = 20;
-			dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
-			dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
-			dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
+			//currentYPosn = 20;
+			//dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
+			//dc.fillRectangle(0, currentYPosn, dc.getWidth(), 5); // horizontal bar
+			//dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT ); // Reset text color to black
 
 			// Display history data, if we have it for this time of day
 			if( historyData[:numRecords] > 0 ) {
@@ -99,9 +101,9 @@ class CommuteHistoryDetailView extends Ui.View {
 				
 			} else {
 				// Display that there is no data
-				dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "No Data", Gfx.TEXT_JUSTIFY_CENTER);
+				//dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "No Data", Gfx.TEXT_JUSTIFY_CENTER);
 			}
-	        
+	        View.onUpdate(dc);
 	     }
 		
 		
@@ -118,6 +120,10 @@ class CommuteHistoryDetailView extends Ui.View {
 			commuteStartTime = commuteStartTime.add( durationIncrement );
 			Ui.requestUpdate();
 		}
+		
+		function getCommuteStartTime() {
+			return commuteStartTime;
+		}
 	
 	}
 	
@@ -132,7 +138,11 @@ class CommuteHistoryDetailView extends Ui.View {
 		}
 		
 		function onBack() {
-			Ui.popView(Ui.SLIDE_RIGHT);
+			// Remove the current history detail view
+			Ui.popView( Ui.SLIDE_LEFT );
+			// Take them back to the chart view with the first time shown in the chart set to
+			// the time they were last looking at in the history detail view
+			CommuteHistory.getController().showHistoryChart( historyDetailView.getCommuteStartTime() );
 			return true;
 		}
 		
@@ -143,7 +153,7 @@ class CommuteHistoryDetailView extends Ui.View {
 			} else if ( Ui.KEY_UP == key ) {
 				historyDetailView.showPreviousHistoryDetail();
 			} else if ( Ui.KEY_ESC == key ) {
-				Ui.popView(Ui.SLIDE_RIGHT);
+				onBack();
 			} 
 		}
 		
