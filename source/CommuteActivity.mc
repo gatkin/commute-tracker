@@ -19,7 +19,7 @@ module CommuteActivity {
 	hidden const MIN_MOVING_SPEED = 4.5; // [m/s] ~ 10mph
 	hidden var activityController;
 
-	function getCommuteActivityController() {
+	function getController() {
 		if( activityController == null ) {
 			activityController = new CommuteActivityController();
 		}
@@ -34,15 +34,11 @@ module CommuteActivity {
 		hidden var hasActiveActivity = false;
 		hidden var summaryView = null;
 		
-		function getActivityView() {
-			activityModel = new CommuteActivityModel();
-			activityView = new CommuteActivityView(activityModel);
+		function startCommuteActivity() {
 			hasActiveActivity = true;
-			return activityView;
-		}
-		
-		function getActivityDelegate() {
-			return new CommuteActivityDelegate();
+			activityModel = new CommuteActivityModel();
+			activityView = new CommuteActivityView( activityModel );
+			Ui.pushView( activityView, new CommuteActivityDelegate(), Ui.SLIDE_LEFT );
 		}
 		
 		
@@ -221,7 +217,8 @@ module CommuteActivity {
 	
 	    //! Load resources
 	    function onLayout(dc) {
-	    }
+	    	setLayout(Rez.Layouts.CommuteActivityLayout(dc));
+	     }
 	
 	    //! Restore the state of the app and prepare the view to be shown
 	    function onShow() {
@@ -230,42 +227,29 @@ module CommuteActivity {
 	
 	    //! Update the view
 	    function onUpdate(dc) {
-		    dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_WHITE );
-	        dc.clear();
-	        dc.setColor( Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT );
 	    	if( commuteModel.hasGPSFix() ) {
-		    	// Update the running time of this activity
-				var timeMoving = commuteModel.getTimeMoving();
-				var timeStopped = commuteModel.getTimeStopped();
-		    	var timeMovingString = CommuteTrackerUtil.formatDuration(timeMoving);
-		    	var timeStoppedString = CommuteTrackerUtil.formatDuration(timeStopped);
-		    	var totalTimeString = CommuteTrackerUtil.formatDuration(timeMoving + timeStopped);
+	    		// Clear the bad GPS message
+	    		View.findDrawableById("wait_for_gps").setText( "" );
+	    	
+				var timeMovingString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeMoving() );
+				View.findDrawableById("move_time").setText( timeMovingString );
 				
-
-				// Display the moving time
-				dc.drawText(( dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Move Time", Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawText(( dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeMovingString, Gfx.TEXT_JUSTIFY_CENTER );
+				var timeStoppedString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeStopped() );
+				View.findDrawableById("stop_time").setText( timeStoppedString );
+				
+		    	
+		    	var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
+		        View.findDrawableById("total_time").setText( totalTimeString );
 		        
-		        // Display the time stopped
-		        dc.drawText(( 3*dc.getWidth()/4), 5, Gfx.FONT_SMALL, "Stop Time", Gfx.TEXT_JUSTIFY_CENTER );
-		        dc.drawText(( 3*dc.getWidth()/4), (dc.getHeight() / 6), Gfx.FONT_NUMBER_MEDIUM, timeStoppedString, Gfx.TEXT_JUSTIFY_CENTER );
-		        
-		        // Display the total time
-		        dc.drawText( (dc.getWidth()/2), (dc.getHeight()/2) + 5, Gfx.FONT_SMALL, "Total Time", Gfx.TEXT_JUSTIFY_CENTER);
-		        dc.drawText(( dc.getWidth()/2), (2*dc.getHeight() / 3), Gfx.FONT_NUMBER_MEDIUM, totalTimeString, Gfx.TEXT_JUSTIFY_CENTER );
-		        
-		        
-		        
-		        // Draw the dividing bars
-				dc.setColor( Gfx.COLOR_DK_BLUE, Gfx.COLOR_TRANSPARENT );
-				dc.fillRectangle((dc.getWidth()/2), 0, 5, dc.getHeight()/2); // Vertical bar
-				dc.fillRectangle(0,(dc.getHeight()/2), dc.getWidth(), 5); // horizontal bar
-
+		        // Redraw the layout with the new string values
+		        View.onUpdate(dc);
 		        
 		        // Draw a bar along the bottom to represent commute efficiency
 				var efficiency = commuteModel.getCommuteEfficiency();
 		        var barColor = Gfx.COLOR_WHITE;
 		        var barWidth = dc.getWidth() * efficiency / 100.0;
+		        
+		        // Choose what color the bar will be based on how good the commute efficiency is
 		        if( efficiency < 25 ) {
 		        	barColor = Gfx.COLOR_RED;
 		        } else if( efficiency < 50 ) {
@@ -278,10 +262,13 @@ module CommuteActivity {
 		        
 		        dc.setColor(barColor, Gfx.COLOR_TRANSPARENT);
 		        dc.fillRectangle(0, dc.getHeight() - 10, barWidth, 10);
-		        
-		        
 	        } else {
-	        	dc.drawText((dc.getWidth()/2), (dc.getHeight()/2), Gfx.FONT_LARGE, "Wait for GPS", Gfx.TEXT_JUSTIFY_CENTER);
+	        	// If we don't have a GPS fix, dash out the times and display a message
+				View.findDrawableById("move_time").setText( "--:--" );
+				View.findDrawableById("stop_time").setText( "--:--" );
+		        View.findDrawableById("total_time").setText( "--:--" );
+	        	View.findDrawableById("wait_for_gps").setText( "Wait for GPS..." );
+	        	View.onUpdate(dc);
 	        }
 	    }
 	

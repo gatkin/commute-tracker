@@ -5,7 +5,7 @@
 			
 			<!-- Draw the heading with a blue bar underneath -->
 			<label id="commute_start_time" x="center" y="2" text="Commute History" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_SMALL"/>
-			<drawable id="blue_bar" />
+			<drawable id="blue_title_bar" />
 			
 			<!-- Number of Commutes -->
 			<label x="10" y="25" text="Commutes" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>

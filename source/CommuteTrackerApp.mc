@@ -28,8 +28,8 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
 	
     function onMenuItem(item) {
         if (item == :start) {
-    		var activityContoller = CommuteActivity.getCommuteActivityController();
-    		Ui.pushView( activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT );
+    		var activityController = CommuteActivity.getController();
+    		activityController.startCommuteActivity();
         } else if (item == :history) {
             var historyController = CommuteHistory.getController();
 			historyController.showHistoryChart( Time.now() );

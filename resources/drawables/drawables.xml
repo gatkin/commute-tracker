@@ -6,8 +6,14 @@
 	    <drawable-list id="white_background">
 	        <shape type="rectangle" color="Gfx.COLOR_WHITE" x="0" y="0" width="fill" height="fill" />
 	    </drawable-list>
-	    <drawable-list id="blue_bar">
+	    <drawable-list id="blue_title_bar">
 	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="20" width="fill" height="5" />
+	    </drawable-list>
+	    <drawable-list id="blue_horizontal_center_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="center" width="fill" height="5" />
+	    </drawable-list>
+	    <drawable-list id="blue_vertical_center_half_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="center" y="0" width="5" height="75" />
 	    </drawable-list>
     </drawables>
 </resources>

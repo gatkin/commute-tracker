@@ -106,7 +106,6 @@ class CommuteHistoryChartView extends Ui.View {
 		
 		function onBack() {
 			// Remove the current view and take them back to the main menu
-			Sys.println("back");
 			Ui.popView( Ui.SLIDE_UP );
 			return true;
 		}
