@@ -1,0 +1,32 @@
+<resources>
+    <drawables>
+	    <drawable-list id="black_background">
+	        <shape type="rectangle" color="Gfx.COLOR_BLACK" x="0" y="0" width="fill" height="fill" />
+	    </drawable-list>
+	    <drawable-list id="white_background">
+	        <shape type="rectangle" color="Gfx.COLOR_WHITE" x="0" y="0" width="fill" height="fill" />
+	    </drawable-list>
+	    <drawable-list id="history_detail_title_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="20" width="fill" height="5" />
+	    </drawable-list>
+	    <drawable-list id="summary_title_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="30" width="fill" height="5" />
+	    </drawable-list>
+	    <drawable-list id="blue_horizontal_center_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="center" width="fill" height="5" />
+	    </drawable-list>
+	    <drawable-list id="blue_vertical_center_half_bar">
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="center" y="0" width="5" height="75" />
+	    </drawable-list>
+	    
+	    <drawable-list id="chart_axes">
+	    	<!-- Vertical axis -->
+	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="48" y="30" width="2" height="100" />
+	    	
+	    	<!-- Horizontal axis -->
+	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="49" y="128" width="150" height="2" />
+	    	
+	    </drawable-list>
+	    
+    </drawables>
+</resources>

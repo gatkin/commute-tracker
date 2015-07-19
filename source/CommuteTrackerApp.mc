@@ -1,6 +1,8 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using Toybox.Time as Time;
+using Toybox.Graphics as Gfx;
 using CommuteHistory as CommuteHistory;
 using CommuteActivity as CommuteActivity;
 
@@ -17,50 +19,51 @@ class CommuteTrackerApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        return [ new MainView(), new CommuteTrackerDelegate() ];
+        return [ new MainView(), new MainViewDelegate() ];
     }
 }
 
+
+class MainView extends Ui.View {
+	
+	function onLayout(dc) {
+        setLayout( Rez.Layouts.MainLayout(dc) );
+    }
+	
+    function onUpdate(dc) {
+		// Call the parent onUpdate function to redraw the layout
+        View.onUpdate(dc);
+    }
+}
+
+class MainViewDelegate extends Ui.BehaviorDelegate {
+
+    function onKey(keyEvent) {
+		var key = keyEvent.getKey();
+		if(  Ui.KEY_ESC == key ) {
+			// Let them leave the App
+			Ui.popView( Ui.SLIDE_LEFT );
+		} else {
+			// If they press any other key, take them to the main menu of the app
+			Ui.pushView( new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT );
+		}
+		return true;
+	}
+}
 
 class MainMenuDelegate extends Ui.MenuInputDelegate {
 	
     function onMenuItem(item) {
-        if (item == :start) {
-    		var activityContoller = CommuteActivity.getCommuteActivityController();
-    		Ui.pushView(activityContoller.getActivityView(), activityContoller.getActivityDelegate(), Ui.SLIDE_LEFT);
-        } else if (item == :history) {
-            var historyController = new CommuteHistory.CommuteHistoryController();
-			Ui.pushView(historyController.getView(), historyController, Ui.SLIDE_LEFT);
+    	// To save memory, we need to remove the views that are on the view stack,
+		// especially the main view which has the image on it. Since we can't do a 
+		// Ui.switchToView with a menu, we need to pop the menu view from the view stack
+		Ui.popView( Ui.SLIDE_LEFT );
+        if ( :start == item ) {
+    		var activityController = CommuteActivity.getController();
+    		activityController.startCommuteActivity();
+        } else if ( :history == item ) {
+            var historyController = CommuteHistory.getController();
+			historyController.showHistoryChart( Time.now() );
         }
     }
 }
-
-class MainView extends Ui.View {
-
-	hidden var hasShownMenu = false;
-    
-    function onShow() {
-    	if( !hasShownMenu ) {
-			Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP);
-			hasShownMenu = true;
-		} else {
-			Ui.popView(Ui.SLIDE_IMMEDIATE);
-		} 
-    }
-    
-}
-
-class CommuteTrackerDelegate extends Ui.BehaviorDelegate {
-
-    function onKey(keyEvent) {
-		var key = keyEvent.getKey();
-		if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
-			Ui.popView(Ui.SLIDE_RIGHT);
-		} 
-	}
-}
-
-
-
-
-
