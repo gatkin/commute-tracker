@@ -2,13 +2,14 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.Time.Gregorian as Gregorian;
 
-
+///! CommuteSummaryView is shown after the user has ended a commute activity.
+///! This view sill display summary stats for the activity that just ended.
 class CommuteSummaryView extends Ui.View {
 		
 		hidden var commuteModel = null;
 		hidden var currentPage = null; // Allows for scrolling though commute stats
 
-
+		///! Constructor, takes as input a CommuteActivityModel
 		function initialize(activityModel) {
 			commuteModel = activityModel;
 			currentPage = :pageOne;
@@ -18,9 +19,9 @@ class CommuteSummaryView extends Ui.View {
 		
 		
 		function onUpdate(dc) {
-	    	var startTimeInfo = Gregorian.info(commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT);
+	    	var startTimeInfo = Gregorian.info( commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT );
 
-			if( currentPage == :pageOne ) {
+			if( :pageOne == currentPage ) {
 				setLayout(Rez.Layouts.CommuteSummaryPageOneLayout(dc));
 			
 				var timeMovingString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeMoving() );
@@ -36,7 +37,7 @@ class CommuteSummaryView extends Ui.View {
 				var distString = dist.format("%.1f") +  " mi";
 				View.findDrawableById("distance").setText( distString );
 			
-			} else { // page 2
+			} else { // Summary Page 2
 				setLayout(Rez.Layouts.CommuteSummaryPageTwoLayout(dc));
 				
 				var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
@@ -49,13 +50,14 @@ class CommuteSummaryView extends Ui.View {
 			}
 			
 			// Draw the title with the current time
-			var startTimeString = CommuteTrackerUtil.formatTime(startTimeInfo.hour, startTimeInfo.min);
+			var startTimeString = CommuteTrackerUtil.formatTime( startTimeInfo.hour, startTimeInfo.min );
 			View.findDrawableById("commute_start_time").setText( "Commute " + startTimeString );
 			
 			// Call the parent onUpdate function to redraw the layout
-			View.onUpdate(dc);
+			View.onUpdate( dc );
 	     }
 	     
+	     ///! Displays the next page of commute summary statistics
 	     function nextPage() {
 	       if( :pageOne == currentPage ) {
 	       		currentPage = :pageTwo;
@@ -63,6 +65,7 @@ class CommuteSummaryView extends Ui.View {
 	       }
 	     }
 	     
+	     ///! Displays the previous page of commute summary statistics
 	     function previousPage() {
 	     	if( :pageTwo == currentPage ) {
 	     		currentPage = :pageOne;
@@ -72,11 +75,12 @@ class CommuteSummaryView extends Ui.View {
 	     
 	}
 	
-	
+///! Input delegate that goes with the CommuteSummaryView	
 class CommuteSummaryDelegate extends Ui.InputDelegate {
 
 		hidden var summaryView = null;
 		
+		///! Constructor, takes as input a CommuteSummaryView object
 		function initialize(view) {
 			summaryView = view;
 		}
@@ -84,7 +88,8 @@ class CommuteSummaryDelegate extends Ui.InputDelegate {
 	
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
-			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
+			if( Ui.KEY_ENTER == key || Ui.KEY_ESC == key ) {
+				// Take them back to the main menu
 				Ui.switchToView( new MainView(), new MainViewDelegate(), Ui.SLIDE_LEFT );
 			} else if( Ui.KEY_DOWN == key ) {
 				summaryView.nextPage();
@@ -95,6 +100,7 @@ class CommuteSummaryDelegate extends Ui.InputDelegate {
 			return true;
 		}
 		
+		///! Allows scrolling through summary pages on touch screen devices
 		function onSwipe(swipeEvent) {
 			var direction = swipeEvent.getDirection();
 			if( Ui.SWIPE_LEFT == direction ) {
