@@ -109,7 +109,7 @@ class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
 	hidden var historyDetailView = null;
 	
 	///! Constructor, takes as input the HistoryDetailView
-	function initialize( histDetailView ) {
+	function initialize(histDetailView) {
 		historyDetailView = histDetailView;
 	}
 	
@@ -131,9 +131,9 @@ class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
 	function onSwipe(swipeEvent) {
 		var direction = swipeEvent.getDirection();
 		if( Ui.SWIPE_LEFT == direction ) {
-			historyDetailView.showNextHistoryDetail();
+			historyDetailView.showNextHistoryDetailPage();
 		} else if( Ui.SWIPE_RIGHT == direction ) {
-			historyDetailView.showPreviousHistoryDetail();
+			historyDetailView.showPreviousHistoryDetailPage();
 		}
 		return true;
 	}

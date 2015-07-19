@@ -51,7 +51,7 @@ module CommuteHistory {
 		///! details for.
 		function showHistoryDetail( timeToShow ) {
 			var historyDetailView = new CommuteHistoryDetailView( timeToShow );
-			var historyDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );
+			var historyDetailDelegate = new CommuteHistoryDetailDelegate( historyDetailView );
 			Ui.switchToView( historyDetailView, historyDetailDelegate, Ui.SLIDE_LEFT );
 		}
 	}
