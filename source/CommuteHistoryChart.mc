@@ -104,12 +104,6 @@ class CommuteHistoryChartView extends Ui.View {
 			historyChartView = view;
 		}
 		
-		function onBack() {
-			// Remove the current view and take them back to the main menu
-			Ui.popView( Ui.SLIDE_UP );
-			return true;
-		}
-		
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
 			if( Ui.KEY_DOWN == key ) {
@@ -117,12 +111,14 @@ class CommuteHistoryChartView extends Ui.View {
 			} else if ( Ui.KEY_UP == key ) {
 				historyChartView.showPreviousHistoryPage();
 			} else if ( Ui.KEY_ESC == key ) {
-				onBack();
+				// Take them back to the main view
+				Ui.switchToView( new MainView(), new MainViewDelegate(), Ui.SLIDE_LEFT );
 			} else if ( Ui.KEY_ENTER ) {
 				// Remove the current history chart view to show the history detail view
-				Ui.popView( Ui.SLIDE_LEFT );
 				CommuteHistory.getController().showHistoryDetail( historyChartView.getTimeToShow() );
 			}
+			
+			return true;
 		}
 		
 		function onSwipe(swipeEvent) {

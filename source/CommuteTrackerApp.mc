@@ -47,12 +47,18 @@ class MainViewDelegate extends Ui.BehaviorDelegate {
 			// If they press any other key, take them to the main menu of the app
 			Ui.pushView( new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_UP );
 		}
+		return true;
 	}
 }
 
 class MainMenuDelegate extends Ui.MenuInputDelegate {
 	
     function onMenuItem(item) {
+    	// To save memory, we need to remove the views that are on the view stack,
+		// Especially the main view which has the image on it. Since we can't do a 
+		// Ui.switchToView with a menu, we need to pop both the menu view and the main
+		// view from the view stack
+		Ui.popView( Ui.SLIDE_LEFT );
         if ( :start == item ) {
     		var activityController = CommuteActivity.getController();
     		activityController.startCommuteActivity();

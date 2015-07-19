@@ -28,13 +28,13 @@ module CommuteHistory {
 		function showHistoryChart( timeToShow ) {
 			var historyChartView = new CommuteHistoryChartView( timeToShow );
 			var historyChartDelegate = new CommuteHistoryChartDelegate( historyChartView );
-			Ui.pushView( historyChartView, historyChartDelegate, Ui.SLIDE_LEFT );
+			Ui.switchToView( historyChartView, historyChartDelegate, Ui.SLIDE_LEFT );
 		}
 		
 		function showHistoryDetail( timeToShow ) {
 			var histDetailView = new CommuteHistoryDetailView( timeToShow );
 			var histDetailDelegate = new CommuteHistoryDetailDelegate( histDetailView );
-			Ui.pushView( histDetailView, histDetailDelegate, Ui.SLIDE_LEFT );
+			Ui.switchToView( histDetailView, histDetailDelegate, Ui.SLIDE_LEFT );
 		}
 	}
 	

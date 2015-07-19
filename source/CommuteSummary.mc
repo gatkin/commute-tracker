@@ -30,7 +30,6 @@ class CommuteSummaryView extends Ui.View {
 				var timeStoppedString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeStopped() );
 				View.findDrawableById("stop_time").setText( timeStoppedString );
 				
-		    	
 		    	var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
 		        View.findDrawableById("total_commute_time").setText( totalTimeString );
 				
@@ -82,17 +81,19 @@ class CommuteSummaryDelegate extends Ui.InputDelegate {
 		function initialize(view) {
 			summaryView = view;
 		}
+		
 	
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
 			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
-				// Take them back to the main menu
-				Ui.popView(Ui.SLIDE_RIGHT);
+				Ui.switchToView( new MainView(), new MainViewDelegate(), Ui.SLIDE_LEFT );
 			} else if( Ui.KEY_DOWN == key ) {
 				summaryView.nextPage();
 			} else if( Ui.KEY_UP == key ) {
 				summaryView.previousPage();
 			}
+			
+			return true;
 		}
 		
 		function onSwipe(swipeEvent) {

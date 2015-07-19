@@ -107,14 +107,6 @@ class CommuteHistoryDetailView extends Ui.View {
 			historyDetailView = histDetailView;
 		}
 		
-		function onBack() {
-			// Remove the current history detail view
-			Ui.popView( Ui.SLIDE_LEFT );
-			// Take them back to the chart view with the first time shown in the chart set to
-			// the time they were last looking at in the history detail view
-			CommuteHistory.getController().showHistoryChart( historyDetailView.getCommuteStartTime() );
-			return true;
-		}
 		
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
@@ -123,8 +115,11 @@ class CommuteHistoryDetailView extends Ui.View {
 			} else if ( Ui.KEY_UP == key ) {
 				historyDetailView.showPreviousHistoryDetail();
 			} else if ( Ui.KEY_ESC == key ) {
-				onBack();
-			} 
+				// Take them back to the chart view with the first time shown in the chart set to
+				// the time they were last looking at in the history detail view
+				CommuteHistory.getController().showHistoryChart( historyDetailView.getCommuteStartTime() );
+			}
+			return true; 
 		}
 		
 		function onSwipe(swipeEvent) {

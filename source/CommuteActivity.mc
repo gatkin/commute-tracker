@@ -22,55 +22,56 @@ module CommuteActivity {
 	function getController() {
 		if( activityController == null ) {
 			activityController = new CommuteActivityController();
-		}
+		} 
 		return activityController;
 	}
-
+	
 
 	hidden class CommuteActivityController {
 	
 		hidden var activityView = null;
 		hidden var activityModel = null;
 		hidden var hasActiveActivity = false;
-		hidden var summaryView = null;
 		
 		function startCommuteActivity() {
 			hasActiveActivity = true;
 			activityModel = new CommuteActivityModel();
 			activityView = new CommuteActivityView( activityModel );
-			Ui.pushView( activityView, new CommuteActivityDelegate(), Ui.SLIDE_LEFT );
+			Ui.switchToView( activityView, new CommuteActivityDelegate(), Ui.SLIDE_LEFT );
 		}
 		
 		
 		function saveActivity() {
 			if( hasActiveActivity ) {
-				// Remove the activity view
-				Ui.popView(Ui.SLIDE_IMMEDIATE);
-	            Ui.popView(Ui.SLIDE_IMMEDIATE);
-			
+				// Remove the Menu view that is currently on top of the page stack
+				Ui.popView( Ui.SLIDE_LEFT );
+				
 				activityModel.pauseActivity(); // Stop the timer and position updates
 	    		CommuteHistory.saveCommute(activityModel);
             
 	            // Show the activity summary
-	            summaryView = new CommuteSummaryView(activityModel);
-		        Ui.pushView(summaryView, new CommuteSummaryDelegate(summaryView), Ui.SLIDE_LEFT);
+	            var summaryView = new CommuteSummaryView(activityModel);
+		        Ui.switchToView(summaryView, new CommuteSummaryDelegate(summaryView), Ui.SLIDE_LEFT);
+		        
+		        activityModel = null;
+				activityView = null;
+				hasActiveActivity = false;
 	        }
 		}
 		
 		function discardActivity() {
 			if( hasActiveActivity ) {
-				// Remove the activity view without saving any data
-				Ui.popView(Ui.SLIDE_IMMEDIATE);
+				// Remove the Menu view that is currently on top of the page stack
+				Ui.popView( Ui.SLIDE_LEFT );
+			
+				// Remove the activity view without saving any data, take them back to the main menu
+				Ui.switchToView( new MainView(), new MainViewDelegate(), Ui.SLIDE_LEFT );
 				activityModel.pauseActivity(); // Stop the timer and position updates
 			}
 		
 			activityModel = null;
 			activityView = null;
 			hasActiveActivity = false;
-		}
-		
-		function getSummaryView() {
-			return summaryView;
 		}
 		
 	}
@@ -284,8 +285,9 @@ module CommuteActivity {
 			var key = keyEvent.getKey();
 			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
 				// The user may want to exit the activity.
-				Ui.pushView(new Rez.Menus.CommuteActivityMenu(), new CommuteActivityMenuDelegate(), Ui.SLIDE_IMMEDIATE);
-			} 
+				Ui.pushView( new Rez.Menus.CommuteActivityMenu(), new CommuteActivityMenuDelegate(), Ui.SLIDE_UP );
+			}
+			return true; 
 		}
 	
 	}
