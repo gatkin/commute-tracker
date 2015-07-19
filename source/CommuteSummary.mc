@@ -15,7 +15,6 @@ class CommuteSummaryView extends Ui.View {
 		}
 		
 	    function onLayout(dc) { }
-	
 		
 		
 		function onUpdate(dc) {
