@@ -53,7 +53,7 @@ class CommuteHistoryDetailView extends Ui.View {
 			var speedString = speed.format("%.1f") + " mph";
 			View.findDrawableById("max_speed").setText( speedString );
 			
-			// Display the number of stops
+			// Display the avg number of stops
 			var avgNumStops = historyData[:numStops] / historyData[:numRecords];
 			var avgNumStopsString = avgNumStops.format("%.1f");
 			View.findDrawableById("avg_stops").setText( avgNumStopsString );

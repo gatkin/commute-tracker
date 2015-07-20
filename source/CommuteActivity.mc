@@ -6,10 +6,8 @@ using Toybox.Timer as Timer;
 using Toybox.Math as Math;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Gregorian;
-using Toybox.ActivityRecording as Record;
 using CommuteHistory as CommuteHistory;
 using Toybox.Position as Position;
-using Toybox.Activity as Activity;
 using CommuteTrackerUtil as CommuteTrackerUtil;
 
 
@@ -17,6 +15,11 @@ module CommuteActivity {
 
 	hidden const UPDATE_PERIOD_SEC = 1; // [seconds], how often we update the model
 	hidden const MIN_MOVING_SPEED = 4.5; // [m/s] ~ 10mph
+
+	///! The activityController variable is kept in singleton scope.
+	///! An Unexpected Type Error gets thrown when a module variable is 
+	///! explicitely initialized to null, so we have to leave this variable 
+	///! unitialized, though it does end up getting implicitly initialized to null
 	hidden var activityController;
 
 	///! The activityController module variable will have a reference to
@@ -55,7 +58,6 @@ module CommuteActivity {
 			Ui.switchToView( activityView, new CommuteActivityDelegate(), Ui.SLIDE_LEFT );
 			
 			modelUpdateTimer = new Timer.Timer();
-			
 		}
 		
 		///! Stops updates to the activity and view if there currently is an active activity
@@ -84,7 +86,7 @@ module CommuteActivity {
 				// Stop the timer and position updates
 				pauseActivity(); 
 				
-	    		CommuteHistory.saveCommute(activityModel);
+	    		CommuteHistory.saveCommute( activityModel );
             
 	            // Show the activity summary
 	            var summaryView = new CommuteSummaryView( activityModel );
@@ -93,7 +95,7 @@ module CommuteActivity {
 	        dispose();
 		}
 		
-		///! If there is an active commute activity, discard the activity,
+		///! If there is an active commute activity, discard the activity without saving it,
 		///! and show the main view
 		function discardActivity() {
 			if( hasActiveActivity ) {
@@ -117,7 +119,7 @@ module CommuteActivity {
 		///! Function that runs once a second. Updates both the model and the view
 		function updateActivity() {
 			activityModel.updateState();
-			Ui.requestUpdate(); // Update the timer displayed on the screen
+			Ui.requestUpdate(); // Update the timers displayed on the screen
 		}
 		
 		///! Cleans up the resources used by the CommuteActivityController.
@@ -156,7 +158,8 @@ module CommuteActivity {
 		}
 		
 		///! This function should be called once ever UPDATE_PERIOD_SEC seconds.
-		///! It updates the state of the commute activity
+		///! It updates the state of the commute activity provided a GPS fix has
+		///! been acquired
 		function updateState() {
 			if( isValidGPS ) {
 				// Update the total distance travelled by integrating the speed over time
@@ -207,6 +210,7 @@ module CommuteActivity {
 			return isValidGPS;
 		}
 		
+		///! Returns the total distance traveled in meters
 		function getTotalDistance() {
 			return totalDistance;
 		}
@@ -227,22 +231,29 @@ module CommuteActivity {
 			return efficiency;
 		}
 		
+		///! Returns a moment object that represents
+		///! the time the commute activity began
 		function getCommuteStartTime() {
 			return commuteStartTime;
 		}
 		
+		///! Returns the time moving in seconds
 		function getTimeMoving() {
 			return timeMoving;
 		}
 		
+		///! Returns the time stopped in seconds
 		function getTimeStopped() {
 			return timeStopped;
 		}
 		
+		///! Returns the total commute time in seconds
 		function getTotalCommuteTime() {
 			return timeMoving + timeStopped;
 		}
 		
+		///! Returns the maximum speed reached during the commmute
+		///! in units of meters per second
 		function getMaxSpeed() {
 			return maxSpeed;
 		}
@@ -293,7 +304,7 @@ module CommuteActivity {
 		        // Call the parent onUpdate to redraw the layout with the new string values
 		        View.onUpdate( dc );
 		        
-		        // Draw a bar along the bottom to represent the currnet commute efficiency.
+		        // Draw a bar along the bottom to represent the current commute efficiency.
 				// Both the width and color of the bar will represent the current efficiency
 				var efficiency = commuteModel.getCommuteEfficiency();
 		        var barColor = Gfx.COLOR_WHITE;
@@ -310,8 +321,8 @@ module CommuteActivity {
 		        	barColor = Gfx.COLOR_GREEN;
 		        }
 		        
-		        dc.setColor(barColor, Gfx.COLOR_TRANSPARENT);
-		        dc.fillRectangle(0, dc.getHeight() - 10, barWidth, 10);
+		        dc.setColor( barColor, Gfx.COLOR_TRANSPARENT );
+		        dc.fillRectangle( 0, dc.getHeight() - 10, barWidth, 10 );
 	        } else {
 	        	// If we don't have a GPS fix, dash out the times and display a message
 				View.findDrawableById("move_time").setText( "--:--" );
@@ -328,7 +339,7 @@ module CommuteActivity {
 	
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
-			if( key == Ui.KEY_ENTER || key == Ui.KEY_ESC ) {
+			if( Ui.KEY_ENTER == key || Ui.KEY_ESC == key ) {
 				// The user may want to exit the activity, bring up the menu
 				Ui.pushView( new Rez.Menus.CommuteActivityMenu(), new CommuteActivityMenuDelegate(), Ui.SLIDE_LEFT );
 			}
@@ -338,7 +349,7 @@ module CommuteActivity {
 	}
 	
 	
-	///! Input delegate that is shown when the user tries to exit the commute activity
+	///! Input delegate for the menu that is shown when the user tries to exit the commute activity
 	hidden class CommuteActivityMenuDelegate extends Ui.MenuInputDelegate {
 
 	    function onMenuItem(item) {

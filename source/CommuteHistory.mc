@@ -20,7 +20,8 @@ module CommuteHistory {
 	///! of the commute in 24-hour time. This forms the base key to acces records
 	///! for each time of day in the object store. To access the particular values
 	///! for each time of day, a key extension for each record is applied to the
-	///! base key for each particular value we want to save or access.
+	///! base key for each particular value we want to save or access. The key
+	///! extensions for each value saved are listed below.
 	hidden const NUM_RECORDS_KEY_EXTN = "_NUM_RECORDS";
 	hidden const MOVE_TIME_KEY_EXTN = "_MOVE_TIME"; 
 	hidden const STOP_TIME_KEY_EXTN = "_STOP_TIME"; 
@@ -38,7 +39,7 @@ module CommuteHistory {
 	hidden class CommuteHistoryController {
 		
 		///! Displays the commute history chart view. Takes as input a moment
-		///! object that represents the time of day for which the first commute
+		///! object that represents the time of day for which the first commute data
 		///! will be displayed at the top of the chart
 		function showHistoryChart( timeToShow ) {
 			var historyChartView = new CommuteHistoryChartView( timeToShow );
@@ -61,7 +62,7 @@ module CommuteHistory {
 	///! Persists the statistics from the given commute model into the object store
 	function saveCommute( commuteModel ) {
 		// Get the base key from the time of day the commute began
-		var keyInfo = getKeyForMoment(commuteModel.getCommuteStartTime());
+		var keyInfo = getKeyForMoment( commuteModel.getCommuteStartTime() );
 		var objectStoreKey = keyInfo[:objectStoreKey];
 		
 		var stopTime = commuteModel.getTimeStopped();
@@ -78,29 +79,29 @@ module CommuteHistory {
 		} else {
 			// Add the stats for this commute to the history we have for all commutes at this time of day
 			numRecords++;
-			stopTime += app.getProperty(objectStoreKey + STOP_TIME_KEY_EXTN);
-			moveTime += app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN);
-			numStops += app.getProperty(objectStoreKey + NUM_STOPS_KEY_EXTN);
-			distance += app.getProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN);
+			stopTime += app.getProperty( objectStoreKey + STOP_TIME_KEY_EXTN );
+			moveTime += app.getProperty( objectStoreKey + MOVE_TIME_KEY_EXTN );
+			numStops += app.getProperty( objectStoreKey + NUM_STOPS_KEY_EXTN );
+			distance += app.getProperty( objectStoreKey + TOTAL_DIST_KEY_EXTN );
 			
-			var prevMaxSpeed = app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN);
+			var prevMaxSpeed = app.getProperty( objectStoreKey + MAX_SPEED_KEY_EXTN );
 			if( prevMaxSpeed > maxSpeed ) {
 				maxSpeed = prevMaxSpeed;
 			}
 		}
 		
 		// Save the stats into the object store
-		app.setProperty(objectStoreKey + NUM_RECORDS_KEY_EXTN, numRecords);
-		app.setProperty(objectStoreKey + STOP_TIME_KEY_EXTN, stopTime);
-		app.setProperty(objectStoreKey + MOVE_TIME_KEY_EXTN, moveTime);
-		app.setProperty(objectStoreKey + NUM_STOPS_KEY_EXTN, numStops);
-		app.setProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN, distance);
-		app.setProperty(objectStoreKey + MAX_SPEED_KEY_EXTN, maxSpeed);
+		app.setProperty( objectStoreKey + NUM_RECORDS_KEY_EXTN, numRecords );
+		app.setProperty( objectStoreKey + STOP_TIME_KEY_EXTN, stopTime );
+		app.setProperty( objectStoreKey + MOVE_TIME_KEY_EXTN, moveTime );
+		app.setProperty( objectStoreKey + NUM_STOPS_KEY_EXTN, numStops );
+		app.setProperty( objectStoreKey + TOTAL_DIST_KEY_EXTN, distance );
+		app.setProperty( objectStoreKey + MAX_SPEED_KEY_EXTN, maxSpeed );
 	}
 	
 	///! Loads all commute statistics for the given time of day. Takes
 	///! as input a moment object representing the time of day for which
-	///! to load all commute statistics. Returns a dictionary with the fileds
+	///! to load all commute statistics. Returns a dictionary with the fields
 	///! {:numRecords, :stopTime, :moveTime, :numStops, :distance, :maxSpeed,
 	///! :startTimeHour, :startTimeMinute}
 	function loadCommuteHistoryDetail( commuteStartTime ) {
@@ -110,7 +111,7 @@ module CommuteHistory {
 		
 		var app = App.getApp();
 		var historyData = null;
-		var numRecords = app.getProperty(objectStoreKey + NUM_RECORDS_KEY_EXTN);
+		var numRecords = app.getProperty( objectStoreKey + NUM_RECORDS_KEY_EXTN );
 		if( null == numRecords || 0 == numRecords ) {
 			// There are no records for this time of day
 			historyData = { 
@@ -128,11 +129,11 @@ module CommuteHistory {
 			// Load the rest of the history data
 			historyData = { 
 				:numRecords => numRecords, 
-				:stopTime => app.getProperty(objectStoreKey + STOP_TIME_KEY_EXTN),
-				:moveTime => app.getProperty(objectStoreKey + MOVE_TIME_KEY_EXTN),
-				:numStops => app.getProperty(objectStoreKey + NUM_STOPS_KEY_EXTN),
-				:distance => app.getProperty(objectStoreKey + TOTAL_DIST_KEY_EXTN),
-				:maxSpeed => app.getProperty(objectStoreKey + MAX_SPEED_KEY_EXTN),
+				:stopTime => app.getProperty( objectStoreKey + STOP_TIME_KEY_EXTN ),
+				:moveTime => app.getProperty( objectStoreKey + MOVE_TIME_KEY_EXTN ),
+				:numStops => app.getProperty( objectStoreKey + NUM_STOPS_KEY_EXTN ),
+				:distance => app.getProperty( objectStoreKey + TOTAL_DIST_KEY_EXTN ),
+				:maxSpeed => app.getProperty( objectStoreKey + MAX_SPEED_KEY_EXTN ),
 				:startTimeHour => keyInfo[:hour],
 				:startTimeMinute => keyInfo[:minute]
 			};
@@ -146,7 +147,7 @@ module CommuteHistory {
 	///! Returns an array of length numRecordsToLoad. Each entry in the returned
 	///! array is a dictionary of the form:
 	///!	{ 
-	///!      :timeLabel => string label for each commute time, 
+	///!      :timeLabel => string label for the commute time, 
 	///!	  :commuteEfficiency => integer between 0 and 100,
 	///! 	  :hasRecord => boolean, whether there are any records for this time of day
 	///!    }
@@ -181,12 +182,12 @@ module CommuteHistory {
 				hasRecord = true;
 			}
 			
-			var timeLabel = CommuteTrackerUtil.formatTime(hour, minute);
+			var timeLabel = CommuteTrackerUtil.formatTime( hour, minute );
 			commuteHistory[i] = {:timeLabel => timeLabel, :commuteEfficiency => commuteEfficiency, :hasRecord => hasRecord};
 			
 			// Advance the hour and minute to point to the next record in the object store
 			minute += HISTORY_RESOLUTION;
-			if( minute == 60 ) {
+			if( 60 == minute ) {
 				hour = ( hour + 1 ) % 24;
 				minute = 0;
 			}
@@ -209,7 +210,7 @@ module CommuteHistory {
 		var hour = timeInfo.hour;
 		
 		// Check for wraparound
-		if(minute == 60) {
+		if( 60 == minute ) {
 			minute = 0;
 			hour = (hour + 1) % 24;
 		}

@@ -14,7 +14,7 @@ class CommuteHistoryChartView extends Ui.View {
 	
 	///! Constructor, takes as input the first commute start time to display at the
 	///! top of the chart
-	function initialize( time ) {
+	function initialize(time) {
 		firstCommuteStartTime = time;
 	}
 
@@ -32,7 +32,7 @@ class CommuteHistoryChartView extends Ui.View {
         for(var i=0; i<commuteHistory.size(); i++) {
 			View.findDrawableById(labelId + i.toString()).setText( commuteHistory[i][:timeLabel] );
     	}
-    	// Call the parent onUpdate function to redraw the layout
+    	// Call the parent onUpdate function to redraw the layout with the bar labels
         View.onUpdate(dc);
         
         // Now that we have updated the layout with the labels, draw all of the bars
@@ -104,7 +104,7 @@ hidden class CommuteHistoryChartDelegate extends Ui.BehaviorDelegate {
 	hidden var historyChartView = null;
 	
 	///! Constructor, takes as input the CommuteHistoryChartView
-	function initialize( view ) {
+	function initialize(view) {
 		historyChartView = view;
 	}
 	

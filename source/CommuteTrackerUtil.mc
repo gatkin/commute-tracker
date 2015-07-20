@@ -11,7 +11,7 @@ module CommuteTrackerUtil {
 	///! hour format with the meridan included
 	function formatTime(hour, minute) {
 		var meridian = "a";
-		if( 12 == hour  ) {
+		if( 12 == hour  ) { // noon
 			meridian = "p";
 		} else if ( hour > 12 && hour < 24 ) {
 			meridian = "p";

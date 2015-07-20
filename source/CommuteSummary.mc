@@ -7,7 +7,7 @@ using Toybox.Time.Gregorian as Gregorian;
 class CommuteSummaryView extends Ui.View {
 		
 		hidden var commuteModel = null;
-		hidden var currentPage = null; // Allows for scrolling though commute stats
+		hidden var currentPage = null; // Allows for scrolling through commute stats
 
 		///! Constructor, takes as input a CommuteActivityModel
 		function initialize(activityModel) {
@@ -19,10 +19,8 @@ class CommuteSummaryView extends Ui.View {
 		
 		
 		function onUpdate(dc) {
-	    	var startTimeInfo = Gregorian.info( commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT );
-
 			if( :pageOne == currentPage ) {
-				setLayout(Rez.Layouts.CommuteSummaryPageOneLayout(dc));
+				setLayout( Rez.Layouts.CommuteSummaryPageOneLayout( dc ) );
 			
 				var timeMovingString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeMoving() );
 				View.findDrawableById("move_time").setText( timeMovingString );
@@ -38,7 +36,7 @@ class CommuteSummaryView extends Ui.View {
 				View.findDrawableById("distance").setText( distString );
 			
 			} else { // Summary Page 2
-				setLayout(Rez.Layouts.CommuteSummaryPageTwoLayout(dc));
+				setLayout( Rez.Layouts.CommuteSummaryPageTwoLayout( dc ) );
 				
 				var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
 				var speedString = speed.format("%.1f") + " mph";
@@ -50,6 +48,7 @@ class CommuteSummaryView extends Ui.View {
 			}
 			
 			// Draw the title with the current time
+			var startTimeInfo = Gregorian.info( commuteModel.getCommuteStartTime(), Time.FORMAT_SHORT );
 			var startTimeString = CommuteTrackerUtil.formatTime( startTimeInfo.hour, startTimeInfo.min );
 			View.findDrawableById("commute_start_time").setText( "Commute " + startTimeString );
 			
@@ -89,7 +88,7 @@ class CommuteSummaryDelegate extends Ui.InputDelegate {
 		function onKey(keyEvent) {
 			var key = keyEvent.getKey();
 			if( Ui.KEY_ENTER == key || Ui.KEY_ESC == key ) {
-				// Take them back to the main menu
+				// Take them back to the main view
 				Ui.switchToView( new MainView(), new MainViewDelegate(), Ui.SLIDE_LEFT );
 			} else if( Ui.KEY_DOWN == key ) {
 				summaryView.nextPage();
