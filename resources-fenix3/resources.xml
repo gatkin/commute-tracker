@@ -1,0 +1,7 @@
+<resources>
+    <string id="AppName">CommuteTracker</string>
+
+    <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
+    <bitmap id="id_car" filename="images/car_icon.png" />
+    
+</resources>
