@@ -10,7 +10,7 @@
 	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="20" width="fill" height="5" />
 	    </drawable-list>
 	    <drawable-list id="summary_title_bar">
-	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="30" width="fill" height="5" />
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="55" width="fill" height="5" />
 	    </drawable-list>
 	    <drawable-list id="blue_horizontal_center_bar">
 	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="center" width="fill" height="5" />
