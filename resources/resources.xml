@@ -11,7 +11,7 @@
     <string id="chart_bar_height">5</string>
     
     <!-- Parameters for drawing the bar that indicates efficiency on the commute activity view -->
-    <string id="efficiency_bar_y">200</string>
+    <string id="efficiency_bar_y">69</string>
     <string id="efficiency_bar_height">10</string>
     
 </resources>

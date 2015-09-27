@@ -324,7 +324,7 @@ module CommuteActivity {
 		        	barColor = Gfx.COLOR_GREEN;
 		        }
 		        dc.setColor( barColor, Gfx.COLOR_TRANSPARENT ); 
-		        dc.fillRectangle( 0, EFFICIENCY_BAR_Y, barWidth, EFFICIENCY_BAR_HEIGHT ); //218
+		        dc.fillRectangle( 0, EFFICIENCY_BAR_Y, barWidth, EFFICIENCY_BAR_HEIGHT );
 	        } else {
 	        	// If we don't have a GPS fix, dash out the times and display a message
 				View.findDrawableById("move_time").setText( "--:--" );
