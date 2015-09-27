@@ -4,10 +4,15 @@
     <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
     <bitmap id="id_car" filename="images/car_icon.png" />
     
+    <!-- Parameters for drawing the history chart on the fenix-3 -->
     <string id="chart_bar_base_y">58</string>
     <string id="chart_bar_base_x">62</string>
     <string id="chart_bar_spacing">17</string>
     <string id="chart_bar_max_width">140</string>
     <string id="chart_bar_height">5</string>
+    
+    <!-- Parameters for drawing the bar that indicates efficiency on the commute activity view -->
+    <string id="efficiency_bar_y">105</string>
+    <string id="efficiency_bar_height">10</string>
     
 </resources>
