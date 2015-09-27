@@ -7,7 +7,7 @@
 	        <shape type="rectangle" color="Gfx.COLOR_WHITE" x="0" y="0" width="fill" height="fill" />
 	    </drawable-list>
 	    <drawable-list id="history_detail_title_bar">
-	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="20" width="fill" height="5" />
+	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="52" width="fill" height="5" />
 	    </drawable-list>
 	    <drawable-list id="summary_title_bar">
 	    	<shape type="rectangle" color="Gfx.COLOR_DK_BLUE" x="0" y="55" width="fill" height="5" />
@@ -21,10 +21,10 @@
 	    
 	    <drawable-list id="chart_axes">
 	    	<!-- Vertical axis -->
-	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="48" y="30" width="2" height="100" />
+	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="60" y="55" width="2" height="100" />
 	    	
 	    	<!-- Horizontal axis -->
-	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="49" y="128" width="150" height="2" />
+	    	<shape type="rectangle" color="Gfx.COLOR_WHITE" x="61" y="153" width="140" height="2" />
 	    	
 	    </drawable-list>
 	    

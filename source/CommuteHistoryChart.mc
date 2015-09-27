@@ -8,8 +8,18 @@ using CommuteHistory as CommuteHistory;
 ///! View that displays the commute history chart
 class CommuteHistoryChartView extends Ui.View {
 
+	///! These values are different depending on the device and the screen size. There 
+	///! currently is not a way to declare numeric constants in the resource file, so
+	///! the best way around tis is to convert string resources into numeric values
+	hidden const BAR_BASE_X = Ui.loadResource( Rez.Strings.chart_bar_base_x ).toNumber();
+	hidden const BAR_BASE_Y = Ui.loadResource( Rez.Strings.chart_bar_base_y ).toNumber();
+	hidden const BAR_SPACING = Ui.loadResource( Rez.Strings.chart_bar_spacing ).toNumber();
+	hidden const BAR_MAX_WIDTH = Ui.loadResource( Rez.Strings.chart_bar_max_width ).toNumber();
+	hidden const BAR_HEIGHT = Ui.loadResource( Rez.Strings.chart_bar_height ).toNumber();
+
 	hidden const TIMES_PER_PAGE = 6; // Show data for 6 commute times per page
 	hidden const PAGE_TIME_STEP = 1800; // Each page has 30 minutes worth of commute times
+	hidden const BAR_LABEL_ID_PREFIX = "bar_label_"; // used to access the bar labels in the layout to set their text
 	hidden var firstCommuteStartTime = null; // The first commute start time in the chart
 	
 	///! Constructor, takes as input the first commute start time to display at the
@@ -28,33 +38,28 @@ class CommuteHistoryChartView extends Ui.View {
         var commuteHistory = CommuteHistory.loadCommuteHistoryOverview( firstCommuteStartTime, TIMES_PER_PAGE );
         
         // First draw all of the time labels and update the view layout
-		var labelId = "bar_label_";
         for(var i=0; i<commuteHistory.size(); i++) {
-			View.findDrawableById(labelId + i.toString()).setText( commuteHistory[i][:timeLabel] );
+			View.findDrawableById( BAR_LABEL_ID_PREFIX + i.toString() ).setText( commuteHistory[i][:timeLabel] );
     	}
     	// Call the parent onUpdate function to redraw the layout with the bar labels
         View.onUpdate(dc);
         
         // Now that we have updated the layout with the labels, draw all of the bars
 		// Note that these values need to match the coordinate values of the time labels
-		// in the layout file. Need to find a way to define the bars in the layout file
-		// and dynamically set the color and width of the bars.
-		var spacing = 17;
-        var barY = 33;
-        var barHeight = 5;
-        var chartBaseX = 50;
-        var maxBarWidth = 150;
+		// in the layout file.
+        var barY = BAR_BASE_Y;
         var barWidth = 0;
         var barColor = Gfx.COLOR_WHITE;
         for(var i=0; i<commuteHistory.size(); i++) {
-        	// Set the width of the bar based on the efficiency
-    		barWidth = commuteHistory[i][:commuteEfficiency] * maxBarWidth / 100.0;
     		
     		// If we have a record for this time, always show a tiny bar, even if the 
 			// efficiency is zero to indicate that a record exists
 			if( ( commuteHistory[i][:hasRecord] ) && ( 0 == commuteHistory[i][:commuteEfficiency] ) ) {
 				barWidth = 2;
-			} 
+			} else {
+				// Set the width of the bar based on the efficiency
+    			barWidth = commuteHistory[i][:commuteEfficiency] * BAR_MAX_WIDTH / 100.0;
+			}
 			
 			// Choose the color for the bar based on the efficiency
 			barColor = Gfx.COLOR_WHITE;
@@ -70,8 +75,8 @@ class CommuteHistoryChartView extends Ui.View {
 			
 			// Draw the bar
 			dc.setColor( barColor, Gfx.COLOR_TRANSPARENT );
-    		dc.fillRectangle ( chartBaseX, barY, barWidth, barHeight );
-    		barY += spacing;
+    		dc.fillRectangle ( BAR_BASE_X, barY, barWidth, BAR_HEIGHT );
+    		barY += BAR_SPACING;
     	}
     }
 

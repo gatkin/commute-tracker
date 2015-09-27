@@ -4,4 +4,10 @@
     <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
     <bitmap id="id_car" filename="images/car_icon.png" />
     
+    <string id="chart_bar_base_y">58</string>
+    <string id="chart_bar_base_x">62</string>
+    <string id="chart_bar_spacing">17</string>
+    <string id="chart_bar_max_width">140</string>
+    <string id="chart_bar_height">5</string>
+    
 </resources>
