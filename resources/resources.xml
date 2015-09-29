@@ -4,6 +4,7 @@
     <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
     <bitmap id="id_car" filename="images/car_icon.png" />
     
+    <!-- Parameters for drawing the commute history chart -->
     <string id="chart_bar_base_y">33</string>
     <string id="chart_bar_base_x">50</string>
     <string id="chart_bar_spacing">17</string>

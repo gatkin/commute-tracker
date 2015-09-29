@@ -3,7 +3,7 @@
 		<layout id="MainLayout">
 		    <label x="center" y="45" text="Commute Tracker" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
 		    <bitmap id="id_car" x="center" y="center" filename="../images/car_icon.png" />
-		    <label x="center" y="135" text="Press any Key" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
+		    <label x="center" y="135" text="Press any Key" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY"/>
 		</layout>
 	</layouts>
 </resources>

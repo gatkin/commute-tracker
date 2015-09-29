@@ -263,6 +263,7 @@ module CommuteActivity {
 	///! This is the view shown during the commute activity
 	hidden class CommuteActivityView extends Ui.View {
 	
+		///! Load parameters to draw the efficiency bar indicator
 		hidden const EFFICIENCY_BAR_Y = Ui.loadResource( Rez.Strings.efficiency_bar_y ).toNumber();
 		hidden const EFFICIENCY_BAR_HEIGHT = Ui.loadResource( Rez.Strings.efficiency_bar_height ).toNumber();
 	
