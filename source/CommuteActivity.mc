@@ -14,7 +14,6 @@ using CommuteTrackerUtil as CommuteTrackerUtil;
 module CommuteActivity {
 
 	hidden const UPDATE_PERIOD_SEC = 1; // [seconds], how often we update the model
-	hidden const MIN_MOVING_SPEED = 4.5; // [m/s] ~ 10mph
 
 	///! The activityController variable is kept in singleton scope.
 	///! An Unexpected Type Error gets thrown when a module variable is 
@@ -135,7 +134,8 @@ module CommuteActivity {
 	
 	///! Represents a commute activity
 	hidden class CommuteActivityModel {
-	
+		hidden const MIN_MOVING_SPEED = 4.5; // [m/s] ~ 10mph
+
 		hidden var totalDistance = null; // in meters
 		hidden var timeMoving = null; // in seconds
 		hidden var timeStopped = null; // in seconds
@@ -263,6 +263,10 @@ module CommuteActivity {
 	///! This is the view shown during the commute activity
 	hidden class CommuteActivityView extends Ui.View {
 	
+		///! Load parameters to draw the efficiency bar indicator
+		hidden const EFFICIENCY_BAR_Y = Ui.loadResource( Rez.Strings.efficiency_bar_y ).toNumber();
+		hidden const EFFICIENCY_BAR_HEIGHT = Ui.loadResource( Rez.Strings.efficiency_bar_height ).toNumber();
+	
 		hidden var commuteModel = null;
 	
 		///! Constructor
@@ -320,9 +324,8 @@ module CommuteActivity {
 		        } else {
 		        	barColor = Gfx.COLOR_GREEN;
 		        }
-		        
-		        dc.setColor( barColor, Gfx.COLOR_TRANSPARENT );
-		        dc.fillRectangle( 0, dc.getHeight() - 10, barWidth, 10 );
+		        dc.setColor( barColor, Gfx.COLOR_TRANSPARENT ); 
+		        dc.fillRectangle( 0, EFFICIENCY_BAR_Y, barWidth, EFFICIENCY_BAR_HEIGHT );
 	        } else {
 	        	// If we don't have a GPS fix, dash out the times and display a message
 				View.findDrawableById("move_time").setText( "--:--" );

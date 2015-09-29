@@ -1,0 +1,24 @@
+<resources>
+    <layouts>
+		<layout id="CommuteSummaryPageTwoLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the heading with a bar underneath -->
+			<label id="commute_start_time" x="center" y="25" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
+			<drawable id="summary_title_bar" />
+			
+			<!-- Max speed -->
+			<label x="15" y="65" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="max_speed" x="190" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Number of Stops -->
+			<label x="15" y="95" text="Stops" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="num_stops" x="190" y="95" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Efficiency -->
+			<label x="15" y="125" text="Efficiency" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="efficiency" x="190" y="125" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+		</layout>
+	</layouts>
+</resources>

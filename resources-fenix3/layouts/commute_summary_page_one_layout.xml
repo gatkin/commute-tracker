@@ -1,0 +1,28 @@
+<resources>
+    <layouts>
+		<layout id="CommuteSummaryPageOneLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the heading with a bar underneath -->
+			<label id="commute_start_time" x="center" y="25" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
+			<drawable id="summary_title_bar" />
+			
+			<!-- Total Commute Time -->
+			<label x="15" y="65" text="Total Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="total_commute_time" x="190" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Time Moving -->
+			<label x="15" y="90" text="Time Moving" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="move_time" x="190" y="90" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Time Stopped -->
+			<label x="15" y="115" text="Time Stopped" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="stop_time" x="190" y="115" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Distance Traveled -->
+			<label x="15" y="140" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="distance" x="190" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+		</layout>
+	</layouts>
+</resources>

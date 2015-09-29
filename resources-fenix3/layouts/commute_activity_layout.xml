@@ -1,0 +1,27 @@
+<resources>
+    <layouts>
+		<layout id="CommuteActivityLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the dividing lines for the timer -->
+			<drawable id="gray_horizontal_center_bar" />
+			<drawable id="gray_vertical_center_half_bar" />
+			
+			<!-- Display the time moving in upper left corner -->
+			<label x="65" y="35" text="Move Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY"/>
+			<label id="move_time" x="65" y="45" color="Gfx.COLOR_DK_GREEN" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_NUMBER_MEDIUM"/>
+			
+			<!-- Display the time stopped in upper right corner -->
+			<label x="155" y="35" text="Stop Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY"/>
+			<label id="stop_time" x="155" y="45" color="Gfx.COLOR_DK_RED" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_NUMBER_MEDIUM"/>
+			
+			<!-- Display the total time in the lower half -->
+			<label x="center" y="120" text="Total Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY"/>
+			<label id="total_time" x="center" y="130" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_NUMBER_MEDIUM"/>
+			
+			<!-- Display message if GPS is bad -->
+			<label id="wait_for_gps" x="center" y="180" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_TINY"/>
+			
+		</layout>
+	</layouts>
+</resources>
