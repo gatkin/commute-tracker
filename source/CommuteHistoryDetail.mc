@@ -44,17 +44,16 @@ class CommuteHistoryDetailView extends Ui.View {
 			View.findDrawableById("avg_stop_time").setText( CommuteTrackerUtil.formatDuration( avgStopTime) );
 			
 			// Display the avg distance traveled
-			var avgDistance = historyData[:distance] / historyData[:numRecords] * CommuteTrackerUtil.METERS_TO_MILES;
-			var avgDistString = avgDistance.format("%.1f") + " mi";
+			var avgDistance = historyData[:distance] / historyData[:numRecords];
+			var avgDistString = CommuteTrackerUtil.formatDistance( avgDistance );
 			View.findDrawableById("avg_distance").setText( avgDistString );
 			
 			// Display the max speed
-			var speed = historyData[:maxSpeed]  * CommuteTrackerUtil.MPS_TO_MPH;
-			var speedString = speed.format("%.1f") + " mph";
+			var speedString = CommuteTrackerUtil.formatSpeed( historyData[:maxSpeed] );
 			View.findDrawableById("max_speed").setText( speedString );
 			
 			// Display the avg number of stops
-			var avgNumStops = historyData[:numStops] / historyData[:numRecords];
+			var avgNumStops = historyData[:numStops].toFloat() / historyData[:numRecords];
 			var avgNumStopsString = avgNumStops.format("%.1f");
 			View.findDrawableById("avg_stops").setText( avgNumStopsString );
 			

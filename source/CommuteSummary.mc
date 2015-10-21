@@ -31,15 +31,13 @@ class CommuteSummaryView extends Ui.View {
 		    	var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
 		        View.findDrawableById("total_commute_time").setText( totalTimeString );
 				
-				var dist = commuteModel.getTotalDistance() * CommuteTrackerUtil.METERS_TO_MILES;
-				var distString = dist.format("%.1f") +  " mi";
+				var distString = CommuteTrackerUtil.formatDistance( commuteModel.getTotalDistance() );
 				View.findDrawableById("distance").setText( distString );
 			
 			} else { // Summary Page 2
 				setLayout( Rez.Layouts.CommuteSummaryPageTwoLayout( dc ) );
 				
-				var speed = commuteModel.getMaxSpeed() * CommuteTrackerUtil.MPS_TO_MPH;
-				var speedString = speed.format("%.1f") + " mph";
+				var speedString = CommuteTrackerUtil.formatSpeed( commuteModel.getMaxSpeed() );
 				View.findDrawableById("max_speed").setText( speedString );
 				
 				View.findDrawableById("num_stops").setText( commuteModel.getNumStops().toString() );
