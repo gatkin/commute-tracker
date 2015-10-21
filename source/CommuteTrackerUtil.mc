@@ -8,10 +8,10 @@ module CommuteTrackerUtil {
 	hidden const METERS_TO_MILES = 0.0006213;
 	
 	// Unit labels
-	hidden const KPH_LABEL = "kph";
-	hidden const MPH_LABEL = "mph";
-	hidden const KILOMETERS_LABEL = "km";
-	hidden const MILES_LABEL = "mi"; 
+	hidden const KPH_LABEL = " kph";
+	hidden const MPH_LABEL = " mph";
+	hidden const KILOMETERS_LABEL = " km";
+	hidden const MILES_LABEL = " mi"; 
 
 	///! Takes as input two integers representing the hour and minute of the time
 	///! in 24-hour military format. If the device settings use 12 hour time, this will 

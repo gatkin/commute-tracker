@@ -8,20 +8,24 @@
 			<drawable id="summary_title_bar" />
 			
 			<!-- Total Commute Time -->
-			<label x="15" y="65" text="Total Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="total_commute_time" x="190" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<label x="15" y="60" text="Total Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="total_commute_time" x="190" y="60" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 			<!-- Time Moving -->
-			<label x="15" y="90" text="Time Moving" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="move_time" x="190" y="90" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<label x="15" y="80" text="Time Moving" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="move_time" x="190" y="80" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 			<!-- Time Stopped -->
-			<label x="15" y="115" text="Time Stopped" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="stop_time" x="190" y="115" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<label x="15" y="100" text="Time Stopped" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="stop_time" x="190" y="100" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
-			<!-- Distance Traveled -->
-			<label x="15" y="140" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="distance" x="190" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<!-- Number of Stops -->
+			<label x="15" y="120" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="num_stops" x="190" y="120" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Efficiency -->
+			<label x="15" y="140" text="Efficiency" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="efficiency" x="190" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 		</layout>
 	</layouts>

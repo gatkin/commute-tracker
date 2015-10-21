@@ -22,27 +22,33 @@ class CommuteSummaryView extends Ui.View {
 			if( :pageOne == currentPage ) {
 				setLayout( Rez.Layouts.CommuteSummaryPageOneLayout( dc ) );
 			
+				var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
+		        View.findDrawableById("total_commute_time").setText( totalTimeString );
+			
 				var timeMovingString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeMoving() );
 				View.findDrawableById("move_time").setText( timeMovingString );
 				
 				var timeStoppedString = CommuteTrackerUtil.formatDuration( commuteModel.getTimeStopped() );
 				View.findDrawableById("stop_time").setText( timeStoppedString );
 				
-		    	var totalTimeString = CommuteTrackerUtil.formatDuration( commuteModel.getTotalCommuteTime() );
-		        View.findDrawableById("total_commute_time").setText( totalTimeString );
+		        View.findDrawableById("num_stops").setText( commuteModel.getNumStops().toString() );
 				
-				var distString = CommuteTrackerUtil.formatDistance( commuteModel.getTotalDistance() );
-				View.findDrawableById("distance").setText( distString );
-			
+				View.findDrawableById("efficiency").setText( commuteModel.getCommuteEfficiency().toString() );
+				
 			} else { // Summary Page 2
 				setLayout( Rez.Layouts.CommuteSummaryPageTwoLayout( dc ) );
 				
-				var speedString = CommuteTrackerUtil.formatSpeed( commuteModel.getMaxSpeed() );
-				View.findDrawableById("max_speed").setText( speedString );
+				var distString = CommuteTrackerUtil.formatDistance( commuteModel.getTotalDistance() );
+				View.findDrawableById("distance").setText( distString );
 				
-				View.findDrawableById("num_stops").setText( commuteModel.getNumStops().toString() );
+				var avgSpeedString = CommuteTrackerUtil.formatSpeed( commuteModel.getAvgSpeed() );
+				View.findDrawableById("avg_speed").setText( avgSpeedString );
 				
-				View.findDrawableById("efficiency").setText( commuteModel.getCommuteEfficiency().toString() );
+				var avgMovingSpeedString = CommuteTrackerUtil.formatSpeed( commuteModel.getAvgMovingSpeed() );
+				View.findDrawableById("avg_moving_speed").setText( avgMovingSpeedString );
+				
+				var maxSpeedString = CommuteTrackerUtil.formatSpeed( commuteModel.getMaxSpeed() );
+				View.findDrawableById("max_speed").setText( maxSpeedString );
 			}
 			
 			// Draw the title with the current time

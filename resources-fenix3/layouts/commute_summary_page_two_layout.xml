@@ -7,17 +7,21 @@
 			<label id="commute_start_time" x="center" y="25" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
 			<drawable id="summary_title_bar" />
 			
-			<!-- Max speed -->
-			<label x="15" y="65" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="max_speed" x="190" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<!-- Distance -->
+			<label x="10" y="65" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="distance" x="200" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
-			<!-- Number of Stops -->
-			<label x="15" y="95" text="Stops" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="num_stops" x="190" y="95" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<!-- Average Speed -->
+			<label x="10" y="90" text="Avg Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="avg_speed" x="200" y="90" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
-			<!-- Efficiency -->
-			<label x="15" y="125" text="Efficiency" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
-			<label id="efficiency" x="190" y="125" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			<!-- Average Moving Speed -->
+			<label x="10" y="115" text="Avg Move Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="avg_moving_speed" x="200" y="115" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
+			
+			<!-- Max Speed -->
+			<label x="10" y="140" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label id="max_speed" x="200" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 		</layout>
 	</layouts>

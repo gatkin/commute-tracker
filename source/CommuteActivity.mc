@@ -257,6 +257,27 @@ module CommuteActivity {
 		function getMaxSpeed() {
 			return maxSpeed;
 		}
+		
+		///! Returns the average speed over the entire commute in
+		///! units of meters per second
+		function getAvgSpeed() {
+			var avgSpeed = 0.0;
+			var totalTime = timeMoving + timeStopped;
+			if( 0 != totalTime ) {
+				avgSpeed = totalDistance / totalTime;
+			}
+			return avgSpeed;
+		}
+		
+		///! Returns the average moving speed during the commute
+		///! in units of meters per second
+		function getAvgMovingSpeed() {
+			var avgMovingSpeed = 0.0;
+			if( 0 != timeMoving ) {
+				avgMovingSpeed = totalDistance / timeMoving;
+			}
+			return avgMovingSpeed;
+		}
 	}
 
 

@@ -7,17 +7,21 @@
 			<label id="commute_start_time" x="center" y="2" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_LARGE"/>
 			<drawable id="summary_title_bar" />
 			
-			<!-- Max speed -->
+			<!-- Distance -->
 			<label x="10" y="45" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
-			<label id="max_speed" x="180" y="45" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
+			<label id="distance" x="180" y="45" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
 			
-			<!-- Number of Stops -->
-			<label x="10" y="70" text="Stops" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
-			<label id="num_stops" x="180" y="70" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
+			<!-- Average Speed -->
+			<label x="10" y="70" text="Avg Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
+			<label id="avg_speed" x="180" y="70" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
 			
-			<!-- Efficiency -->
-			<label x="10" y="95" text="Efficiency" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
-			<label id="efficiency" x="180" y="95" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
+			<!-- Average Moving Speed -->
+			<label x="10" y="95" text="Avg Moving Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
+			<label id="avg_moving_speed" x="180" y="95" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
+			
+			<!-- Max Speed -->
+			<label x="10" y="120" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_SMALL"/>
+			<label id="max_speed" x="180" y="120" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_SMALL"/>
 			
 		</layout>
 	</layouts>
