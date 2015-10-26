@@ -20,7 +20,7 @@
 			<label id="stop_time" x="190" y="100" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 			<!-- Number of Stops -->
-			<label x="15" y="120" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
+			<label x="15" y="120" text="Stops" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_TINY"/>
 			<label id="num_stops" x="190" y="120" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_TINY"/>
 			
 			<!-- Efficiency -->
