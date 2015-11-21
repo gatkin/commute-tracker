@@ -195,6 +195,10 @@ module CommuteHistory {
 		return commuteHistory;
 	}
 	
+	function deleteAllHistory() {
+		App.getApp().clearProperties();
+	}
+	
 	///! Takes as input a moment object representing the time of day to
 	///! retrieve the object store key. Returns a dictionary of the form
 	///! {

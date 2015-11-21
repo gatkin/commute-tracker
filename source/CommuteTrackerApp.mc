@@ -64,6 +64,19 @@ class MainMenuDelegate extends Ui.MenuInputDelegate {
         } else if ( :history == item ) {
             var historyController = CommuteHistory.getController();
 			historyController.showHistoryChart( Time.now() );
+        } else if( :delete_history == item ) {
+        	Ui.pushView( new Confirmation("Delete all History?"), new DeleteConfirmationDelegate(), Ui.SLIDE_LEFT );
         }
     }
+}
+
+
+class DeleteConfirmationDelegate extends Ui.ConfirmationDelegate {
+	
+	function onResponse(response) {
+		if( Ui.CONFIRM_YES == response ) {
+			var historyController = CommuteHistory.getController();
+        	historyController.deleteAllHistory();
+		}
+	}
 }

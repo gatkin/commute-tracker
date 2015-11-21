@@ -1,4 +1,5 @@
 <menu id="MainMenu">
     <menu-item id="start">Start Trip</menu-item>
     <menu-item id="history">View History</menu-item>
+    <menu-item id="delete_history">Clear History</menu-item>
 </menu>
