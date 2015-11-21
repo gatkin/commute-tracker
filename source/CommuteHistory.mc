@@ -199,6 +199,18 @@ module CommuteHistory {
 		App.getApp().clearProperties();
 	}
 	
+	function deleteRecordForTime(commuteStartTime) {
+		var objectStoreKey = getKeyForMoment( commuteStartTime )[:objectStoreKey];
+		var app = App.getApp();
+		
+		app.deleteProperty( objectStoreKey + NUM_RECORDS_KEY_EXTN );
+		app.deleteProperty( objectStoreKey + STOP_TIME_KEY_EXTN );
+		app.deleteProperty( objectStoreKey + MOVE_TIME_KEY_EXTN );
+		app.deleteProperty( objectStoreKey + NUM_STOPS_KEY_EXTN );
+		app.deleteProperty( objectStoreKey + TOTAL_DIST_KEY_EXTN );
+		app.deleteProperty( objectStoreKey + MAX_SPEED_KEY_EXTN );
+	}
+	
 	///! Takes as input a moment object representing the time of day to
 	///! retrieve the object store key. Returns a dictionary of the form
 	///! {

@@ -1,4 +1,5 @@
 using Toybox.System as Sys;
+using Toybox.Time.Gregorian as Gregorian;
 
 module CommuteTrackerUtil {
 
@@ -44,6 +45,11 @@ module CommuteTrackerUtil {
 		}
 		
 		return timeString;
+	}
+	
+	function formatMoment(moment) {
+		var timeInfo = Gregorian.info( moment, Gregorian.FORMAT_SHORT );
+		return formatTime( timeInfo.hour, timeInfo.min );
 	}
 	
 	///! Takes as input an integer representing a duration in seconds, and returns a 

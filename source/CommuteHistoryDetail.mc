@@ -10,6 +10,7 @@ using CommuteTrackerUtil as CommuteTrackerUtil;
 class CommuteHistoryDetailView extends Ui.View {
 	
 	hidden var commuteStartTime = null; // Moment object
+	hidden var hasHistoryData = false;
 
 	///! Constructor, takes as input the commute start time for which
 	///! to show detailed statistics
@@ -25,6 +26,7 @@ class CommuteHistoryDetailView extends Ui.View {
 
 		// Display history data, if we have it for this time of day
 		if( historyData[:numRecords] > 0 ) {
+			hasHistoryData = true;
 			setLayout( Rez.Layouts.HistoryDetailLayout(dc) );
 
 			// Display the number of commutes
@@ -68,6 +70,7 @@ class CommuteHistoryDetailView extends Ui.View {
 		} else {
 			// Display that there is no data
 			setLayout( Rez.Layouts.HistoryDetailNoDataLayout(dc) );
+			hasHistoryData = false;
 		}
 		
 		// Draw the title with the commute start time
@@ -99,6 +102,12 @@ class CommuteHistoryDetailView extends Ui.View {
 		return commuteStartTime;
 	}
 
+	///! Returns true if currently displaying commute history data, returns false if
+	///! if there is no history for the commute time that is being displayed
+	function isHistoryDataDisplayed() {
+		return hasHistoryData;
+	}
+
 }
 
 
@@ -113,6 +122,7 @@ class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
 	}
 	
 	function onKey(keyEvent) {
+		Sys.println(historyDetailView.isHistoryDataDisplayed());
 		var key = keyEvent.getKey();
 		if( Ui.KEY_DOWN == key ) {
 			historyDetailView.showNextHistoryDetailPage();
@@ -122,6 +132,10 @@ class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
 			// Take them back to the chart view with the first time shown in the chart set to
 			// the time they were last looking at in the history detail view
 			CommuteHistory.getController().showHistoryChart( historyDetailView.getCommuteStartTime() );
+		} else if( Ui.KEY_MODE == key && historyDetailView.isHistoryDataDisplayed() ) {
+			// See if they want to delete the history for this time
+			var confirmationMessage = "Delete history for " + CommuteTrackerUtil.formatMoment( historyDetailView.getCommuteStartTime() ) + "?";
+			Ui.pushView( new Confirmation( confirmationMessage ), new ConfirmDeleteRecordDelegate( historyDetailView.getCommuteStartTime() ), Ui.SLIDE_LEFT );
 		}
 		return true; 
 	}
@@ -135,5 +149,21 @@ class CommuteHistoryDetailDelegate extends Ui.BehaviorDelegate {
 			historyDetailView.showPreviousHistoryDetailPage();
 		}
 		return true;
+	}
+}
+
+
+class ConfirmDeleteRecordDelegate extends Ui.ConfirmationDelegate {
+	
+	hidden var commuteStartTime = null; // Moment object
+	
+	function initialize(startTime) {
+		commuteStartTime = startTime;
+	}
+	
+	function onResponse(response) {
+		if( Ui.CONFIRM_YES == response ) {
+			CommuteHistory.deleteRecordForTime( commuteStartTime );
+		}
 	}
 }
