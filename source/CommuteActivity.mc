@@ -202,10 +202,6 @@ module CommuteActivity {
 			}
 		}
 		
-		function isMoving() {
-			return isMoving;
-		}
-		
 		function hasGPSFix() {
 			return isValidGPS;
 		}
