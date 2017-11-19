@@ -1,0 +1,44 @@
+<resources>
+    <layouts>
+		<layout id="HistoryDetailLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the heading with a bar underneath -->
+			<label id="commute_start_time" x="center" y="40" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_XTINY"/>
+			<drawable id="history_detail_title_bar" />
+			
+			<!-- Number of Commutes -->
+			<label x="20" y="65" text="Commutes" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="num_commutes" x="215" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Commute Time -->
+			<label x="20" y="80" text="Avg Time" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_commute_time" x="215" y="80" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Time Moving -->
+			<label x="20" y="95" text="Avg Time Moving" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_move_time" x="215" y="95" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Time Stopped -->
+			<label x="20" y="110" text="Avg Time Stopped" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_stop_time" x="215" y="110" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Distance Traveled -->
+			<label x="20" y="125" text="Avg Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_distance" x="215" y="125" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Max Speed -->
+			<label x="20" y="140" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="max_speed" x="215" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Number of Stops -->
+			<label x="20" y="155" text="Avg Stops" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_stops" x="215" y="155" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Efficiency -->
+			<label x="20" y="170" text="Avg Efficiency" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_efficiency" x="215" y="170" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+		</layout>
+	</layouts>
+</resources>

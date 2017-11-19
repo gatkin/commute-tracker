@@ -1,0 +1,28 @@
+<resources>
+    <layouts>
+		<layout id="CommuteSummaryPageTwoLayout">
+			<drawable id="white_background" />
+			
+			<!-- Draw the heading with a bar underneath -->
+			<label id="commute_start_time" x="center" y="30" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER" font="Gfx.FONT_MEDIUM"/>
+			<drawable id="summary_title_bar" />
+			
+			<!-- Distance -->
+			<label x="10" y="65" text="Distance" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="distance" x="215" y="65" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Speed -->
+			<label x="10" y="90" text="Avg Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_speed" x="215" y="90" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Average Moving Speed -->
+			<label x="10" y="115" text="Avg Move Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="avg_moving_speed" x="215" y="115" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+			<!-- Max Speed -->
+			<label x="10" y="140" text="Max Speed" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_LEFT" font="Gfx.FONT_XTINY"/>
+			<label id="max_speed" x="215" y="140" color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_RIGHT" font="Gfx.FONT_XTINY"/>
+			
+		</layout>
+	</layouts>
+</resources>
