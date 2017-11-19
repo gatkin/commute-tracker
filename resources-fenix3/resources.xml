@@ -1,8 +1,8 @@
 <resources>
     <string id="AppName">CommuteTracker</string>
 
-    <bitmap id="LauncherIcon" filename="images/launcher_icon.png" />
-    <bitmap id="id_car" filename="images/car_icon.png" />
+    <bitmap id="LauncherIcon" filename="../resources/images/launcher_icon.png" />
+    <bitmap id="id_car" filename="../resources/images/car_icon.png" />
     
     <!-- Parameters for drawing the history chart on the fenix-3 -->
     <string id="chart_bar_base_y">58</string>
